@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cut-Roll-Movies", "Cut-Roll-Movies", "{E84E1EF2-7A92-4B3C-A5C1-4CE936CE149B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6D716E99-9127-4446-BD08-7BFE0403572C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cut-Roll-Movies.Api", "Cut-Roll-Movies\src\Cut-Roll-Movies.Api\Cut-Roll-Movies.Api.csproj", "{48EEEF23-A2EF-4ADC-BA03-2A26BCDDD641}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cut-Roll-Movies.Core", "Cut-Roll-Movies\src\Cut-Roll-Movies.Core\Cut-Roll-Movies.Core.csproj", "{2BE0C120-3731-4586-AC7B-4416FBC95118}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cut-Roll-Movies.Infrastructure", "Cut-Roll-Movies\src\Cut-Roll-Movies.Infrastructure\Cut-Roll-Movies.Infrastructure.csproj", "{D1AF8361-1646-4488-B143-4BA90399C5AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48EEEF23-A2EF-4ADC-BA03-2A26BCDDD641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48EEEF23-A2EF-4ADC-BA03-2A26BCDDD641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48EEEF23-A2EF-4ADC-BA03-2A26BCDDD641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48EEEF23-A2EF-4ADC-BA03-2A26BCDDD641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE0C120-3731-4586-AC7B-4416FBC95118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE0C120-3731-4586-AC7B-4416FBC95118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE0C120-3731-4586-AC7B-4416FBC95118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE0C120-3731-4586-AC7B-4416FBC95118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1AF8361-1646-4488-B143-4BA90399C5AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1AF8361-1646-4488-B143-4BA90399C5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1AF8361-1646-4488-B143-4BA90399C5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1AF8361-1646-4488-B143-4BA90399C5AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6D716E99-9127-4446-BD08-7BFE0403572C} = {E84E1EF2-7A92-4B3C-A5C1-4CE936CE149B}
+		{48EEEF23-A2EF-4ADC-BA03-2A26BCDDD641} = {6D716E99-9127-4446-BD08-7BFE0403572C}
+		{2BE0C120-3731-4586-AC7B-4416FBC95118} = {6D716E99-9127-4446-BD08-7BFE0403572C}
+		{D1AF8361-1646-4488-B143-4BA90399C5AB} = {6D716E99-9127-4446-BD08-7BFE0403572C}
+	EndGlobalSection
+EndGlobal

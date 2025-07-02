@@ -1,0 +1,6 @@
+@Cut_Roll_Movies.Api_HostAddress = http://localhost:5273
+
+GET {{Cut_Roll_Movies.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
