@@ -9,7 +9,7 @@ public class ProductionCompany
 
     public required string Name { get; set; }
 
-    public int? CountryCode { get; set; }
+    public string? CountryCode { get; set; }
 
     public string? LogoPath { get; set; }
 

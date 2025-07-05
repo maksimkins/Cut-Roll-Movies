@@ -7,7 +7,7 @@ public class MovieOriginCountry
 {
     public int MovieId { get; set; }
 
-    public int CountryCode { get; set; }
+    public required string CountryCode { get; set; }
 
     public required Movie Movie { get; set; }
 
