@@ -1,7 +1,8 @@
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.ProductionCompanies.Models;
 
-namespace Cut_Roll_Movies.Core.MovieProductionCompanies;
+namespace Cut_Roll_Movies.Core.MovieProductionCompanies.Models;
+
 public class MovieProductionCompany
 {
     public int MovieId { get; set; }

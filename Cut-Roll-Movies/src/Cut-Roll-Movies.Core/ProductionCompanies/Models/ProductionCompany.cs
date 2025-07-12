@@ -1,5 +1,5 @@
 using Cut_Roll_Movies.Core.Countries.Models;
-using Cut_Roll_Movies.Core.MovieProductionCompanies;
+using Cut_Roll_Movies.Core.MovieProductionCompanies.Models;
 
 namespace Cut_Roll_Movies.Core.ProductionCompanies.Models;
 

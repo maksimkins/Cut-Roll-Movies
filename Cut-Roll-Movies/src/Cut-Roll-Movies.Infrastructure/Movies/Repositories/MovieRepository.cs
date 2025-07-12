@@ -16,7 +16,7 @@ public class MovieRepository : IMovieRepository
         _context = context;
     }
 
-    public async Task<PagedResult<Movie>> GetAsync(MovieSearchRequest request)
+    public async Task<PagedResult<Movie>> SearchAsync(MovieSearchRequest request)
     {
         var query = _context.Movies.AsQueryable();
 
