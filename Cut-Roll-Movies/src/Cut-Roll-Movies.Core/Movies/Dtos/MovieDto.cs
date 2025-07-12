@@ -3,9 +3,9 @@ namespace Cut_Roll_Movies.Core.Movies.Dtos;
 public class MovieDto
 {
     public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
+    public required string Title { get; set; }
     public string? Tagline { get; set; }
-    public string Overview { get; set; } = string.Empty;
+    public required string Overview { get; set; }
     public DateTime? ReleaseDate { get; set; }
     public int? Runtime { get; set; }
     public float? VoteAverage { get; set; }
