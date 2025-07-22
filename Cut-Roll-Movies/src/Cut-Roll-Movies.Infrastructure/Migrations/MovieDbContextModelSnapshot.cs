@@ -51,6 +51,19 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                     b.ToTable("cast", (string)null);
                 });
 
+            modelBuilder.Entity("Cut_Roll_Movies.Core.Common.Models.ExecutedScript", b =>
+                {
+                    b.Property<string>("ScriptName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ExecutedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ScriptName");
+
+                    b.ToTable("ExecutedScripts");
+                });
+
             modelBuilder.Entity("Cut_Roll_Movies.Core.Countries.Models.Country", b =>
                 {
                     b.Property<string>("Iso3166_1")
@@ -285,8 +298,8 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Budget")
-                        .HasColumnType("integer");
+                    b.Property<long?>("Budget")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Homepage")
                         .HasColumnType("text");
@@ -304,8 +317,8 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("Revenue")
-                        .HasColumnType("integer");
+                    b.Property<long?>("Revenue")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("Runtime")
                         .HasColumnType("integer");

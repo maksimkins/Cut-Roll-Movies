@@ -1,5 +1,6 @@
 using Cut_Roll_Movies.Core.Casts.Configuration;
 using Cut_Roll_Movies.Core.Casts.Models;
+using Cut_Roll_Movies.Core.Common.Models;
 using Cut_Roll_Movies.Core.Countries.Configurations;
 using Cut_Roll_Movies.Core.Countries.Models;
 using Cut_Roll_Movies.Core.Crews.Configurations;
@@ -37,6 +38,7 @@ namespace Cut_Roll_Movies.Infrastructure.Common.Data;
 
 public class MovieDbContext(DbContextOptions<MovieDbContext> options) : DbContext(options)
 {
+    public DbSet<ExecutedScript> ExecutedScripts { get; set; } = default!;
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<MovieGenre> MovieGenres { get; set; }
@@ -58,6 +60,8 @@ public class MovieDbContext(DbContextOptions<MovieDbContext> options) : DbContex
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<ExecutedScript>().HasKey(e => e.ScriptName);
 
         modelBuilder.ApplyConfiguration(new MovieConfiguration());
         modelBuilder.ApplyConfiguration(new GenreConfiguration());

@@ -27,9 +27,9 @@ public class Movie
 
     public float? VoteAverage { get; set; }
 
-    public int? Budget { get; set; }
+    public long? Budget { get; set; }
 
-    public int? Revenue { get; set; }
+    public long? Revenue { get; set; }
 
     public string? Homepage { get; set; }
 
