@@ -16,7 +16,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - movies-network
+      - microservices-network
     restart: always
 
   
@@ -32,7 +32,7 @@ services:
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
-      - movies-network
+      - microservices-network
     volumes:
       - movies_db_volume:/var/lib/postgresql/data
     restart: always
@@ -41,6 +41,6 @@ volumes:
   movies_db_volume:
 
 networks:
-  movies-network:
-    driver: bridge
+  microservices-network:
+    external: true
 

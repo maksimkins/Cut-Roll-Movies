@@ -4,7 +4,7 @@ using Cut_Roll_Movies.Core.MovieGenres.Models;
 using Cut_Roll_Movies.Core.MovieImages.Models;
 using Cut_Roll_Movies.Core.MovieKeywords.Models;
 using Cut_Roll_Movies.Core.MovieOriginCountries.Models;
-using Cut_Roll_Movies.Core.MovieProductionCompanies;
+using Cut_Roll_Movies.Core.MovieProductionCompanies.Models;
 using Cut_Roll_Movies.Core.MovieProductionCountries.Models;
 using Cut_Roll_Movies.Core.MovieSpokenLanguages.Models;
 using Cut_Roll_Movies.Core.MovieVideos.Models;

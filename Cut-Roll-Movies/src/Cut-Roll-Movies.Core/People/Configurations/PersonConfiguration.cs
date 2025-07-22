@@ -1,0 +1,15 @@
+namespace Cut_Roll_Movies.Core.People.Configurations;
+
+using Cut_Roll_Movies.Core.People.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+public class PersonConfiguration : IEntityTypeConfiguration<Person>
+{
+    public void Configure(EntityTypeBuilder<Person> builder)
+    {
+        builder.ToTable("people")
+            .HasKey(p => p.Id);
+    }
+}
+

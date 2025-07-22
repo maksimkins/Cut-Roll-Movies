@@ -1,0 +1,20 @@
+namespace Cut_Roll_Movies.Core.ProductionCompanies.Configurations;
+
+using Cut_Roll_Movies.Core.ProductionCompanies.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+public class ProductionCompanyConfiguration : IEntityTypeConfiguration<ProductionCompany>
+{
+    public void Configure(EntityTypeBuilder<ProductionCompany> builder)
+    {
+        builder.ToTable("production_companies")
+            .HasKey(c => c.Id);
+
+        builder.HasOne(c => c.Country)
+            .WithMany(cn => cn.Companies)
+            .HasForeignKey(c => c.CountryCode)
+            .IsRequired(false);
+    }
+}
+
