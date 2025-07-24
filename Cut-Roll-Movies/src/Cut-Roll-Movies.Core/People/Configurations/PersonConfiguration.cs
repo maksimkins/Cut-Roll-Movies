@@ -9,7 +9,10 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
     public void Configure(EntityTypeBuilder<Person> builder)
     {
         builder.ToTable("people")
-            .HasKey(p => p.Id);
+            .HasKey(c => c.Id);
+
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
     }
 }
 

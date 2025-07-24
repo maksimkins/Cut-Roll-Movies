@@ -3,7 +3,7 @@ using Cut_Roll_Movies.Core.MovieKeywords.Dtos;
 
 namespace Cut_Roll_Movies.Core.MovieKeywords.Repositories;
 
-public interface IMovieKeywordRepository : ICreateAsync<int, MovieKeywordDto>, IDeleteAsync<int, MovieKeywordDto>, IDeleteRangeById<bool, int>
+public interface IMovieKeywordRepository : ICreateAsync<Guid, MovieKeywordDto>, IDeleteAsync<Guid, MovieKeywordDto>, IDeleteRangeById<bool, Guid>
 {
     
 }

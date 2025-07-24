@@ -5,7 +5,7 @@ namespace Cut_Roll_Movies.Core.People.Models;
 
 public class Person
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public required string Name { get; set; }
 

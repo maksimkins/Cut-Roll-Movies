@@ -5,9 +5,9 @@ namespace Cut_Roll_Movies.Core.MovieProductionCompanies.Models;
 
 public class MovieProductionCompany
 {
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
 
-    public int CompanyId { get; set; }
+    public Guid CompanyId { get; set; }
 
     public required Movie Movie { get; set; }
 

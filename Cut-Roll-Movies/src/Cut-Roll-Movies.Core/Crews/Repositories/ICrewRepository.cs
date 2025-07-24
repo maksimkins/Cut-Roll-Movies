@@ -4,7 +4,7 @@ using Cut_Roll_Movies.Core.Crews.Models;
 
 namespace Cut_Roll_Movies.Core.Crews.Repositories;
 
-public interface ICrewRepository : IGetByIdAsync<Crew?, int>, IUpdateAsync<CrewUpdateDto, int?>, IDeleteByIdAsync<int, int?>, ICreateAsync<CrewCreateDto, int>
+public interface ICrewRepository : IGetByIdAsync<Crew?, Guid>, IUpdateAsync<CrewUpdateDto, Guid?>, IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<CrewCreateDto, Guid>
 {
     
 }

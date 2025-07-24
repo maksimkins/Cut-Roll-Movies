@@ -3,8 +3,8 @@ using Cut_Roll_Movies.Core.MovieVideos.Dtos;
 
 namespace Cut_Roll_Movies.Core.MovieVideos.Repositories;
 
-public interface IMovieVideoRepository : ICreateAsync<int, MovieVideoCreateDto>, IDeleteAsync<int, int>,
-IDeleteRangeById<bool, int>, IUpdateAsync<MovieVideoUpdateDto, int>
+public interface IMovieVideoRepository : ICreateAsync<Guid, MovieVideoCreateDto>, IDeleteAsync<Guid, Guid>,
+IDeleteRangeById<bool, Guid>, IUpdateAsync<MovieVideoUpdateDto, Guid>
 {
     
 }

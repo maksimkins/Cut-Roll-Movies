@@ -9,7 +9,10 @@ public class MovieImageConfiguration : IEntityTypeConfiguration<MovieImage>
     public void Configure(EntityTypeBuilder<MovieImage> builder)
     {
         builder.ToTable("movie_images")
-            .HasKey(i => i.Id);
+            .HasKey(c => c.Id);
+
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
 
         builder.HasOne(i => i.Movie)
             .WithMany(m => m.Images)

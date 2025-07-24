@@ -3,7 +3,8 @@ using Cut_Roll_Movies.Core.MovieProductionCountries.Dtos;
 
 namespace Cut_Roll_Movies.Core.MovieProductionCountries.Repostiroes;
 
-public interface IMovieProductionCountryRepository : ICreateAsync<int, MovieProductionCountryDto>, IDeleteAsync<int, MovieProductionCountryDto>, IDeleteRangeById<bool, int>
+public interface IMovieProductionCountryRepository : ICreateAsync<Guid, MovieProductionCountryDto>, IDeleteAsync<Guid, MovieProductionCountryDto>,
+IDeleteRangeById<bool, Guid>
 {
     
 }

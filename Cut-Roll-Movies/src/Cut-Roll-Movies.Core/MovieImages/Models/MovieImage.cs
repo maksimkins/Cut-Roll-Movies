@@ -4,9 +4,9 @@ namespace Cut_Roll_Movies.Core.MovieImages.Models;
 
 public class MovieImage
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
 
     public required string Type { get; set; }
     

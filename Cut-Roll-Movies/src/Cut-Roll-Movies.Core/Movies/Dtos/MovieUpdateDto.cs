@@ -2,7 +2,7 @@ namespace Cut_Roll_Movies.Core.Movies.Dtos;
 
 public class MovieUpdateDto
 {
-    public required int Id { get; set; }
+    public required Guid Id { get; set; }
     public string? Title { get; set; }
     public string? Tagline { get; set; }
     public string? Overview { get; set; }

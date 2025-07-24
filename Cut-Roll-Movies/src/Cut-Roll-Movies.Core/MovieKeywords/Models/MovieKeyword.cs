@@ -5,9 +5,9 @@ namespace Cut_Roll_Movies.Core.MovieKeywords.Models;
 
 public class MovieKeyword
 {
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
 
-    public int KeywordId { get; set; }
+    public Guid KeywordId { get; set; }
 
     public required Movie Movie { get; set; }
 

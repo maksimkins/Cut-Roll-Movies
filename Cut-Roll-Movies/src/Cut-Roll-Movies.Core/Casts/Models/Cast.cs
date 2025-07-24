@@ -5,11 +5,11 @@ namespace Cut_Roll_Movies.Core.Casts.Models;
 
 public class Cast
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
 
-    public int PersonId { get; set; }
+    public Guid PersonId { get; set; }
 
     public string? Character { get; set; }
 

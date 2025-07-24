@@ -11,6 +11,9 @@ public class ProductionCompanyConfiguration : IEntityTypeConfiguration<Productio
         builder.ToTable("production_companies")
             .HasKey(c => c.Id);
 
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
+
         builder.HasOne(c => c.Country)
             .WithMany(cn => cn.Companies)
             .HasForeignKey(c => c.CountryCode)

@@ -5,11 +5,11 @@ namespace Cut_Roll_Movies.Core.Crews.Models;
 
 public class Crew
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
 
-    public int PersonId { get; set; }
+    public Guid PersonId { get; set; }
 
     public string? Job { get; set; }
 

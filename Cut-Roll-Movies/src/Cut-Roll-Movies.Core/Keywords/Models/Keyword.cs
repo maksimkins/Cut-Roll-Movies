@@ -4,7 +4,7 @@ namespace Cut_Roll_Movies.Core.Keywords.Models;
 
 public class Keyword
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public required string Name { get; set; }
     

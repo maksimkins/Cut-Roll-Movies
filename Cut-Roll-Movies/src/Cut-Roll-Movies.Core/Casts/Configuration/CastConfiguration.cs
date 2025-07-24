@@ -15,6 +15,9 @@ public class CastConfiguration : IEntityTypeConfiguration<Cast>
         builder.ToTable("cast")
         .HasKey(c => c.Id);
 
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
+
         builder.HasOne(c => c.Movie)
             .WithMany(m => m.Cast)
             .HasForeignKey(c => c.MovieId);

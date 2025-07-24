@@ -3,7 +3,7 @@ using Cut_Roll_Movies.Core.Genres.Dtos;
 
 namespace Cut_Roll_Movies.Core.Genres.Repositories;
 
-public interface IGenreRepository : IDeleteByIdAsync<int, int?>, ICreateAsync<GenreCreateDto, int>
+public interface IGenreRepository : IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<GenreCreateDto, Guid>
 {
     
 }

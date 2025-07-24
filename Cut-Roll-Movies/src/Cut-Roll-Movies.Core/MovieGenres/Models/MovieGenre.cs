@@ -5,9 +5,9 @@ namespace Cut_Roll_Movies.Core.MovieGenres.Models;
 
 public class MovieGenre
 {
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
     
-    public int GenreId { get; set; }
+    public Guid GenreId { get; set; }
 
     public required Movie Movie { get; set; }
 

@@ -5,7 +5,7 @@ namespace Cut_Roll_Movies.Core.MovieOriginCountries.Models;
 
 public class MovieOriginCountry
 {
-    public int MovieId { get; set; }
+    public Guid MovieId { get; set; }
 
     public required string CountryCode { get; set; }
 

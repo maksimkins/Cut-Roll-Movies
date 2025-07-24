@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UpdateDb();
+app.UpdateDbContext();
 
 app.UseSwagger();
 app.UseSwaggerUI();

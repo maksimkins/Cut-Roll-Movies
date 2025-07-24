@@ -24,11 +24,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Casts.Models.Cast", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<int>("CastOrder")
                         .HasColumnType("integer");
@@ -36,11 +35,11 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                     b.Property<string>("Character")
                         .HasColumnType("text");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -80,11 +79,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Crews.Models.Crew", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Department")
                         .HasColumnType("text");
@@ -92,11 +90,11 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                     b.Property<string>("Job")
                         .HasColumnType("text");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -109,11 +107,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Genres.Models.Genre", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -126,11 +123,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Keywords.Models.Keyword", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -143,11 +139,11 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieGenres.Models.MovieGenre", b =>
                 {
-                    b.Property<int>("GenreId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("GenreId", "MovieId");
 
@@ -158,18 +154,17 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieImages.Models.MovieImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -184,11 +179,11 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieKeywords.Models.MovieKeyword", b =>
                 {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("KeywordId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("KeywordId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("MovieId", "KeywordId");
 
@@ -199,8 +194,8 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieOriginCountries.Models.MovieOriginCountry", b =>
                 {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CountryCode")
                         .HasColumnType("text");
@@ -214,11 +209,11 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieProductionCompanies.Models.MovieProductionCompany", b =>
                 {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("MovieId", "CompanyId");
 
@@ -229,8 +224,8 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieProductionCountries.Models.MovieProductionCountry", b =>
                 {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CountryCode")
                         .HasColumnType("text");
@@ -244,8 +239,8 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieSpokenLanguages.Models.MovieSpokenLanguage", b =>
                 {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LanguageCode")
                         .HasColumnType("text");
@@ -259,18 +254,17 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.MovieVideos.Models.MovieVideo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -292,11 +286,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Movies.Models.Movie", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<long?>("Budget")
                         .HasColumnType("bigint");
@@ -340,11 +333,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.People.Models.Person", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -360,11 +352,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.ProductionCompanies.Models.ProductionCompany", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("CountryCode")
                         .HasColumnType("text");

@@ -9,7 +9,10 @@ public class GenreConfiguration : IEntityTypeConfiguration<Genre>
     public void Configure(EntityTypeBuilder<Genre> builder)
     { 
         builder.ToTable("genres")
-            .HasKey(g => g.Id);
+            .HasKey(c => c.Id);
+
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
     }
 }
 

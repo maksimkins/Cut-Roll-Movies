@@ -4,7 +4,7 @@ using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 
 namespace Cut_Roll_Movies.Core.Casts.Repositories;
 
-public interface ICastRepository : IGetByIdAsync<Cast?, int>, IUpdateAsync<CastUpdateDto, int?>, IDeleteByIdAsync<int, int?>, ICreateAsync<CastUpdateDto, int>
+public interface ICastRepository : IGetByIdAsync<Cast?, Guid>, IUpdateAsync<CastUpdateDto, Guid?>, IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<CastUpdateDto, Guid>
 {
     
 }

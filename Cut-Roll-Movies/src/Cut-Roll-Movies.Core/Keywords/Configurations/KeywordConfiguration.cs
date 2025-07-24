@@ -9,7 +9,10 @@ public class KeywordConfiguration : IEntityTypeConfiguration<Keyword>
     public void Configure(EntityTypeBuilder<Keyword> builder)
     {
         builder.ToTable("keywords")
-            .HasKey(k => k.Id);
+            .HasKey(c => c.Id);
+
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
     }
 }
 
