@@ -1,4 +1,7 @@
+using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
+using Cut_Roll_Movies.Core.Crews.Models;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.Movies.Repositories;
@@ -189,4 +192,25 @@ public class MovieEfCoreRepository : IMovieRepository
         await _context.SaveChangesAsync();
         return entity.Id;
     }
+
+    public Task<IEnumerable<Cast>> GetCastByMovieIdAsync(Guid movieId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Crew>> GetCrewByMovieIdAsync(Guid movieId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Guid> DeleteByIdAsync(Guid? id)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<Guid?> ICreateAsync<MovieCreateDto, Guid?>.CreateAsync(MovieCreateDto entity)
+    {
+        throw new NotImplementedException();
+    }
+
 }

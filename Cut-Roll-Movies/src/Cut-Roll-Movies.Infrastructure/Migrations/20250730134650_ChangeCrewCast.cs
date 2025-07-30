@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Cut_Roll_Movies.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateIds : Migration
+    public partial class ChangeCrewCast : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -270,7 +270,6 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                 name: "cast",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     MovieId = table.Column<Guid>(type: "uuid", nullable: false),
                     PersonId = table.Column<Guid>(type: "uuid", nullable: false),
                     Character = table.Column<string>(type: "text", nullable: true),
@@ -278,7 +277,7 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cast", x => x.Id);
+                    table.PrimaryKey("PK_cast", x => new { x.PersonId, x.MovieId });
                     table.ForeignKey(
                         name: "FK_cast_movies_MovieId",
                         column: x => x.MovieId,
@@ -297,7 +296,6 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                 name: "crew",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     MovieId = table.Column<Guid>(type: "uuid", nullable: false),
                     PersonId = table.Column<Guid>(type: "uuid", nullable: false),
                     Job = table.Column<string>(type: "text", nullable: true),
@@ -305,7 +303,7 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_crew", x => x.Id);
+                    table.PrimaryKey("PK_crew", x => new { x.MovieId, x.PersonId });
                     table.ForeignKey(
                         name: "FK_crew_movies_MovieId",
                         column: x => x.MovieId,
@@ -374,16 +372,6 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                 column: "MovieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cast_PersonId",
-                table: "cast",
-                column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_crew_MovieId",
-                table: "crew",
-                column: "MovieId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_crew_PersonId",
                 table: "crew",
                 column: "PersonId");
@@ -438,7 +426,7 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("DROP EXTENSION IF EXISTS \"pgcrypto\";");
-            
+
             migrationBuilder.DropTable(
                 name: "cast");
 
