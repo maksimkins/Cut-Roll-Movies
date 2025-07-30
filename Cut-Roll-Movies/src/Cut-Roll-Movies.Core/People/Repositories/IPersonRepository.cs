@@ -7,8 +7,8 @@ using Cut_Roll_Movies.Core.People.Models;
 
 namespace Cut_Roll_Movies.Core.People.Repositories;
 
-public interface IPersonRepository : ISearchAsync<PagedResult<Person>, PersonSearchRequest>, IGetByIdAsync<Person?, Guid>, IUpdateAsync<PersonUpdateDto, Guid?>,
-IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<PersonCreateDto, Guid>
+public interface IPersonRepository : ISearchAsync<PersonSearchRequest, PagedResult<Person>>, IGetByIdAsync<Guid, Person?>, IUpdateAsync<PersonUpdateDto, Guid?>,
+IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<PersonCreateDto, Guid?>
 {
     Task<IEnumerable<Movie>> GetFilmographyAsync(MovieSearchByPesonIdDto searchByPersonIdDto);
 }

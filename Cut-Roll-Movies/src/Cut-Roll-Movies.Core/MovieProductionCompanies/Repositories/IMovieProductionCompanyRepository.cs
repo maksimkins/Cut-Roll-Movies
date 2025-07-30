@@ -6,9 +6,10 @@ using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.ProductionCompanies.Models;
 
-public interface IMovieProductionCompanyRepository : ICreateAsync<int, MovieProductionCompanyDto>, IDeleteAsync<int, MovieProductionCompanyDto>,
-IDeleteRangeById<bool, int>
+public interface IMovieProductionCompanyRepository : ICreateAsync<MovieProductionCompanyDto, Guid?>, IDeleteAsync<MovieProductionCompanyDto, Guid?>,
+IDeleteRangeById<Guid, bool>, IBulkCreateAsync<MovieProductionCompanyDto, bool>, IBulkDeleteAsync<MovieProductionCompanyDto, bool>
 {
     Task<IEnumerable<ProductionCompany>> GetCompaniesByMovieIdAsync(Guid movieId);
     Task<IEnumerable<Movie>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto movieSearchByCompanyDto);
+    Task<bool> ExistsAsync(MovieProductionCompanyDto dto);
 }

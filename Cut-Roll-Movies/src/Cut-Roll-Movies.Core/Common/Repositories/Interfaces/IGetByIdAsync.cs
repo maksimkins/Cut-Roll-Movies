@@ -1,6 +1,6 @@
 namespace Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 
-public interface IGetByIdAsync<TEntity, TId>
+public interface IGetByIdAsync<TId, TReturnEntity>
 {
-    Task<TEntity?> GetByIdAsync(TId id);
+    Task<TReturnEntity> GetByIdAsync(TId id);
 }

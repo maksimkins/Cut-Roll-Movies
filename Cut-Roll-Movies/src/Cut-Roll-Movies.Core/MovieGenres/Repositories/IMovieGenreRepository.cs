@@ -6,8 +6,10 @@ using Cut_Roll_Movies.Core.MovieGenres.Dtos;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 
-public interface IMovieGenreRepository : ICreateAsync<Guid, MovieGenreDto>, IDeleteAsync<Guid, MovieGenreDto>, IDeleteRangeById<bool, Guid>
+public interface IMovieGenreRepository : ICreateAsync<MovieGenreDto, Guid?>, IDeleteAsync<MovieGenreDto, Guid?>, IDeleteRangeById<Guid, bool>,
+    IBulkCreateAsync<MovieGenreDto, bool>, IBulkDeleteAsync<MovieGenreDto, bool>
 {
     Task<IEnumerable<Genre>> GetGenresForMovieAsync(Guid movieId);
     Task<IEnumerable<Movie>> GetMoviesForGenreAsync(MovieSearchByGenreDto searchDto);
+    Task<bool> ExistsAsync(MovieGenreDto dto);
 }

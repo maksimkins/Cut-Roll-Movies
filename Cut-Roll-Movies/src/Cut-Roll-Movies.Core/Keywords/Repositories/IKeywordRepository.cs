@@ -4,7 +4,7 @@ using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 using Cut_Roll_Movies.Core.Keywords.Dtos;
 using Cut_Roll_Movies.Core.Keywords.Models;
 
-public interface IKeywordRepository : IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<KeywordCreateDto, Guid>, ISearchAsync<IEnumerable<Keyword>, string>
+public interface IKeywordRepository : IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<KeywordCreateDto, Guid?>, ISearchAsync<string, IEnumerable<Keyword>>
 {
     Task<IEnumerable<Keyword>> GetAllAsync();
     Task<Keyword?> GetByIdAsync(Guid id);

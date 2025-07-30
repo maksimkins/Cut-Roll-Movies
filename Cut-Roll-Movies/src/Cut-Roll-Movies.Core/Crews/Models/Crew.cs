@@ -5,8 +5,6 @@ namespace Cut_Roll_Movies.Core.Crews.Models;
 
 public class Crew
 {
-    public Guid Id { get; set; }
-
     public Guid MovieId { get; set; }
 
     public Guid PersonId { get; set; }

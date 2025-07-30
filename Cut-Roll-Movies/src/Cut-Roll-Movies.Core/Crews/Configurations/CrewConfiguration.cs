@@ -9,10 +9,7 @@ public class CrewConfiguration : IEntityTypeConfiguration<Crew>
     public void Configure(EntityTypeBuilder<Crew> builder)
     {
         builder.ToTable("crew")
-            .HasKey(c => c.Id);
-
-        builder.Property(e => e.Id)
-            .HasDefaultValueSql("gen_random_uuid()");
+            .HasKey(c => new { c.MovieId, c.PersonId });
 
 
         builder.HasOne(c => c.Movie)
