@@ -1,3 +1,5 @@
+#pragma warning disable CS8618
+
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.SpokenLanguages.Models;
 
@@ -9,7 +11,7 @@ public class MovieSpokenLanguage
 
     public required string LanguageCode { get; set; }
 
-    public required Movie Movie { get; set; }
+    public Movie Movie { get; set; }
 
-    public required SpokenLanguage Language { get; set; }
+    public SpokenLanguage Language { get; set; }
 }

@@ -8,7 +8,7 @@ using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 
 public interface IMovieRepository : ISearchAsync<MovieSearchRequest, PagedResult<Movie>>, IGetByIdAsync<Guid, Movie?>,
-IUpdateAsync<MovieUpdateDto, Guid?>, IDeleteByIdAsync<Guid?, Guid>, ICreateAsync<MovieCreateDto, Guid?>, ICountAsync
+IUpdateAsync<MovieUpdateDto, Guid?>, IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<MovieCreateDto, Guid?>, ICountAsync
 {
     Task<IEnumerable<Cast>> GetCastByMovieIdAsync(Guid movieId);
     Task<IEnumerable<Crew>> GetCrewByMovieIdAsync(Guid movieId);

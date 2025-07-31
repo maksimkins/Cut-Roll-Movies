@@ -1,3 +1,5 @@
+#pragma warning disable CS8618
+
 using Cut_Roll_Movies.Core.Movies.Models;
 
 namespace Cut_Roll_Movies.Core.MovieVideos.Models;
@@ -16,5 +18,5 @@ public class MovieVideo
 
     public required string Key { get; set; }
 
-    public required Movie Movie { get; set; }
+    public Movie Movie { get; set; }
 }

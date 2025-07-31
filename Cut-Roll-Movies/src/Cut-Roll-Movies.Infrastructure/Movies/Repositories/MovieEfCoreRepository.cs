@@ -1,6 +1,5 @@
 using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Common.Dtos;
-using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 using Cut_Roll_Movies.Core.Crews.Models;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
@@ -23,16 +22,12 @@ public class MovieEfCoreRepository : IMovieRepository
     {
         var query = _context.Movies.AsQueryable();
 
-        // Apply filters
         query = ApplyFilters(query, request);
 
-        // Get total count before pagination
         var totalCount = await query.CountAsync();
 
-        // Apply sorting
         query = ApplySorting(query, request);
 
-        // Apply pagination
         var movies = await query
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
@@ -127,12 +122,22 @@ public class MovieEfCoreRepository : IMovieRepository
         return await _context.Movies.CountAsync();
     }
 
-    public async Task<Guid> CreateAsync(MovieCreateDto entity)
+    public async Task<Guid?> CreateAsync(MovieCreateDto entity)
     {
         var movie = new Movie()
         {
             Title = entity.Title,
-            Overview = entity.Overview
+            Overview = entity.Overview, 
+            Rating = entity.Rating, 
+            ImdbId = entity.ImdbId,
+            Homepage = entity.Homepage,
+            Revenue = entity.Revenue,
+            Budget = entity.Budget,
+            VoteAverage = entity.VoteAverage,
+            Runtime = entity.Runtime,
+            ReleaseDate = entity.ReleaseDate,
+            Tagline = entity.Tagline,
+
         };
 
         _context.Movies.Add(movie);
@@ -161,7 +166,6 @@ public class MovieEfCoreRepository : IMovieRepository
         if (existingMovie == null)
             return null;
         
-        // Update only non-null properties
         if (entity.Title != null)
             existingMovie.Title = entity.Title;
         
@@ -193,24 +197,16 @@ public class MovieEfCoreRepository : IMovieRepository
         return entity.Id;
     }
 
-    public Task<IEnumerable<Cast>> GetCastByMovieIdAsync(Guid movieId)
+    public async Task<IEnumerable<Cast>> GetCastByMovieIdAsync(Guid movieId)
     {
-        throw new NotImplementedException();
+        var res = await _context.Movies.Include(m => m.Cast).FirstOrDefaultAsync(m => m.Id == movieId);
+        return res?.Cast ?? [];
     }
 
-    public Task<IEnumerable<Crew>> GetCrewByMovieIdAsync(Guid movieId)
+    public async Task<IEnumerable<Crew>> GetCrewByMovieIdAsync(Guid movieId)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<Guid> DeleteByIdAsync(Guid? id)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<Guid?> ICreateAsync<MovieCreateDto, Guid?>.CreateAsync(MovieCreateDto entity)
-    {
-        throw new NotImplementedException();
+        var res = await _context.Movies.Include(m => m.Cast).FirstOrDefaultAsync(m => m.Id == movieId);
+        return res?.Crew ?? [];
     }
 
 }
