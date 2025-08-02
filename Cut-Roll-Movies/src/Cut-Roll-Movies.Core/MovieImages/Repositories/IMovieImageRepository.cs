@@ -8,5 +8,5 @@ public interface IMovieImageRepository : ICreateAsync<MovieImageCreateDto, Guid?
 IBulkCreateAsync<MovieImageCreateDto, bool>, IBulkDeleteAsync<MovieImageDeleteDto, bool>
 {
     Task<IEnumerable<MovieImage>> GetImagesByMovieIdAsync(Guid movieId);
-    Task<IEnumerable<MovieImage>> GetImagesByTypeAsync(Guid movieId, string type);
+    Task<IEnumerable<MovieImage>> GetImagesByTypeAsync(MovieImageSearchDto dto);
 }

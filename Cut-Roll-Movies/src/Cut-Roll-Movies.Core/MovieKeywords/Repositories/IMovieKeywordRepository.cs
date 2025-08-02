@@ -1,5 +1,6 @@
 namespace Cut_Roll_Movies.Core.MovieKeywords.Repositories;
 
+using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 using Cut_Roll_Movies.Core.Keywords.Models;
 using Cut_Roll_Movies.Core.MovieKeywords.Dtos;
@@ -10,6 +11,6 @@ public interface IMovieKeywordRepository : ICreateAsync<MovieKeywordDto, Guid?>,
 IBulkCreateAsync<MovieKeywordDto, bool>, IBulkDeleteAsync<MovieKeywordDto, bool>
 {
     Task<IEnumerable<Keyword>> GetKeywordsByMovieIdAsync(Guid movieId);
-    Task<IEnumerable<Movie>> GetMoviesByKeywordIdAsync(MovieSearchByKeywordDto searchDto);
+    Task<PagedResult<Movie>> GetMoviesByKeywordIdAsync(MovieSearchByKeywordDto searchDto);
     Task<bool> ExistsAsync(MovieKeywordDto dto);
 }

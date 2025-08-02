@@ -1,10 +1,12 @@
 namespace Cut_Roll_Movies.Core.Countries.Services;
 
+using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.Countries.Dtos;
 using Cut_Roll_Movies.Core.Countries.Models;
 
 public interface ICountryService
 {
-    Task<IEnumerable<Country>> GetAllCountriesAsync();
-    Task<IEnumerable<Country>> SearchCountryByNameAsync(string name);
-    Task<Country?> GetCountryByIsoCodeAsync(string isoCode);
+    Task<PagedResult<Country>> GetAllCountriesAsync(ContryPaginationDto? dto);
+    Task<PagedResult<Country>> SearchCountryByNameAsync(ContrySearchByNameDto? dto);
+    Task<Country?> GetCountryByIsoCodeAsync(string? isoCode);
 }

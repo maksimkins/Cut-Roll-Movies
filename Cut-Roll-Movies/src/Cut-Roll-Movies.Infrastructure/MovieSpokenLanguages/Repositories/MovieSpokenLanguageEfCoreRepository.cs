@@ -1,0 +1,133 @@
+namespace Cut_Roll_Movies.Infrastructure.MovieSpokenLanguages.Repositories;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.Movies.Dtos;
+using Cut_Roll_Movies.Core.Movies.Models;
+using Cut_Roll_Movies.Core.MovieSpokenLanguages.Dtos;
+using Cut_Roll_Movies.Core.MovieSpokenLanguages.Models;
+using Cut_Roll_Movies.Core.MovieSpokenLanguages.Repositories;
+using Cut_Roll_Movies.Core.SpokenLanguages.Models;
+using Cut_Roll_Movies.Infrastructure.Common.Data;
+using Microsoft.EntityFrameworkCore;
+
+public class MovieSpokenLanguageEfCoreRepository : IMovieSpokenLanguageRepository
+{
+    private readonly MovieDbContext _dbContext;
+    public MovieSpokenLanguageEfCoreRepository(MovieDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<bool> BulkCreateAsync(IEnumerable<MovieSpokenLanguageDto> listToCreate)
+    {
+        var newList = listToCreate.Select(toCreate => new MovieSpokenLanguage
+        {
+            MovieId = toCreate.MovieId,
+            LanguageCode = toCreate.LanguageCode,
+        });
+        
+        await _dbContext.MovieSpokenLanguages.AddRangeAsync(newList);
+        var res = await _dbContext.SaveChangesAsync();
+
+        return res > 0;
+    }
+
+    public async Task<bool> BulkDeleteAsync(IEnumerable<MovieSpokenLanguageDto> listToDelete)
+    {
+        foreach (var item in listToDelete)
+        {
+            var movieSpokenLanguage = await _dbContext.MovieSpokenLanguages.FirstOrDefaultAsync(c =>
+                c.MovieId == item.MovieId && c.LanguageCode == item.LanguageCode);
+
+            if (movieSpokenLanguage != null)
+            {
+                _dbContext.MovieSpokenLanguages.Remove(movieSpokenLanguage);
+            }
+        }
+
+        var result = await _dbContext.SaveChangesAsync();
+        return result > 0;
+    }
+
+    public async Task<Guid?> CreateAsync(MovieSpokenLanguageDto entity)
+    {
+        var movieSpokenLanguage = new MovieSpokenLanguage
+        {
+            MovieId = entity.MovieId,
+            LanguageCode = entity.LanguageCode,
+        };
+
+        await _dbContext.MovieSpokenLanguages.AddAsync(movieSpokenLanguage);
+        var res = await _dbContext.SaveChangesAsync();
+
+        return res > 0 ? entity.MovieId : null;
+    }
+
+    public async Task<Guid?> DeleteAsync(MovieSpokenLanguageDto dto)
+    {
+        var toDelete = await _dbContext.MovieSpokenLanguages.FirstOrDefaultAsync(g => g.MovieId == dto.MovieId && g.LanguageCode == dto.LanguageCode);
+        if (toDelete != null)
+            _dbContext.MovieSpokenLanguages.Remove(toDelete);
+
+        var res = await _dbContext.SaveChangesAsync();
+        return res > 0 ? dto.MovieId : null;
+    }
+
+    public async Task<bool> DeleteRangeById(Guid movieId)
+    {
+        var toDeletes = _dbContext.MovieSpokenLanguages.Where(i => i.MovieId == movieId);
+        _dbContext.RemoveRange(toDeletes);
+
+        var res = await _dbContext.SaveChangesAsync();
+        return res > 0;
+    }
+
+    public async Task<bool> ExistsAsync(MovieSpokenLanguageDto dto)
+    {
+        return await _dbContext.MovieSpokenLanguages.AnyAsync(g => g.MovieId == dto.MovieId && g.LanguageCode == dto.LanguageCode);
+    }
+
+    public async Task<PagedResult<Movie>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto movieSearchByCountryDto)
+    {
+        var query = _dbContext.Movies
+            .Include(m => m.Keywords)
+            .ThenInclude(mg => mg.Keyword)
+            .AsQueryable();
+
+        if (string.IsNullOrEmpty(movieSearchByCountryDto.Iso639_1))
+        {
+            query = query.Where(m => m.SpokenLanguages.Any(mg => mg.LanguageCode == movieSearchByCountryDto.Iso639_1));
+        }
+
+        else if (!string.IsNullOrWhiteSpace(movieSearchByCountryDto.EnglishName))
+        {
+            query = query.Where(m => m.SpokenLanguages.Any(k => k.Language.EnglishName.Contains(movieSearchByCountryDto.EnglishName)));
+        }
+
+        if (movieSearchByCountryDto.Page < 1) movieSearchByCountryDto.Page = 1;
+        if (movieSearchByCountryDto.PageSize < 1) movieSearchByCountryDto.PageSize = 10;
+
+        var totalCount = await query.CountAsync();
+
+        query = query.
+            Skip((movieSearchByCountryDto.Page - 1) * movieSearchByCountryDto.PageSize)
+            .Take(movieSearchByCountryDto.PageSize);
+
+        return new PagedResult<Movie>()
+        {
+            Data = await query.ToListAsync(),
+            TotalCount = totalCount,
+            Page = movieSearchByCountryDto.Page,
+            PageSize = movieSearchByCountryDto.PageSize
+        };
+    }
+
+    public async Task<IEnumerable<SpokenLanguage>> GetSpokenLanguagesByMovieIdAsync(Guid movieId)
+    {
+        return await _dbContext.MovieSpokenLanguages.Where(g => g.MovieId == movieId).
+            Include(g => g.Language).Select(g => g.Language).ToListAsync();
+    }
+}

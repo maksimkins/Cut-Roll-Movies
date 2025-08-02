@@ -2,12 +2,14 @@ namespace Cut_Roll_Movies.Core.Casts.Repositories;
 
 using Cut_Roll_Movies.Core.Casts.Dtos;
 using Cut_Roll_Movies.Core.Casts.Models;
+using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 
-public interface ICastRepository : IGetByIdAsync<Guid, Cast?>, IUpdateAsync<CastUpdateDto, Guid?>, IDeleteAsync<CastDeleteDto, Guid?>,
-    ICreateAsync<CastCreateDto, Guid?>, ISearchAsync<CastSearchDto, IEnumerable<Cast>>, IBulkCreateAsync<CastCreateDto, bool>,
-    IBulkDeleteAsync<CastCreateDto, bool>
+public interface ICastRepository : IUpdateAsync<CastUpdateDto, Guid?>, IDeleteAsync<CastDeleteDto, Guid?>,
+    ICreateAsync<CastCreateDto, Guid?>, ISearchAsync<CastSearchDto, PagedResult<Cast>>, IBulkCreateAsync<CastCreateDto, bool>,
+    IBulkDeleteAsync<CastDeleteDto, bool>
 {
-    public Task<IEnumerable<Cast>> GetByMovieIdAsync(Guid movieId);
-    public Task<bool> ExistsAsync(Guid id);
+    public Task<PagedResult<Cast>> GetByMovieIdAsync(CastGetByMovieIdDto dto);
+    public Task<PagedResult<Cast>> GetByPersonIdAsync(CastGetByPersonIdDto dto);
+    public Task<bool> ExistsAsync(CastDto dto);
 }

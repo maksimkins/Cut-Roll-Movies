@@ -1,5 +1,6 @@
 namespace Cut_Roll_Movies.Core.MovieProductionCompanies.Repositories;
 
+using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 using Cut_Roll_Movies.Core.MovieProductionCompanies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Dtos;
@@ -10,6 +11,6 @@ public interface IMovieProductionCompanyRepository : ICreateAsync<MovieProductio
 IDeleteRangeById<Guid, bool>, IBulkCreateAsync<MovieProductionCompanyDto, bool>, IBulkDeleteAsync<MovieProductionCompanyDto, bool>
 {
     Task<IEnumerable<ProductionCompany>> GetCompaniesByMovieIdAsync(Guid movieId);
-    Task<IEnumerable<Movie>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto movieSearchByCompanyDto);
+    Task<PagedResult<Movie>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto movieSearchByCompanyDto);
     Task<bool> ExistsAsync(MovieProductionCompanyDto dto);
 }

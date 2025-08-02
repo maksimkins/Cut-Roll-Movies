@@ -6,11 +6,11 @@ using Cut_Roll_Movies.Core.ProductionCompanies.Models;
 
 public interface IProductionCompanyService
 {
-    Task<PagedResult<ProductionCompany>> SearchProductionCompanyAsync(ProductionCompanySearchRequest request);
-    Task<Guid> CreateProductionCompanyAsync(ProductionCompanyCreateDto dto);
-    Task<Guid> DeleteProductionCompanyById(Guid id);
-    Task<Guid> UpdateProductionCompanyAsync(ProductionCompanyUpdateDto dto);
-    Task<ProductionCompany> GetProductionCompanyByIdAsync(Guid id);
+    Task<PagedResult<ProductionCompany>> SearchProductionCompanyAsync(ProductionCompanySearchRequest? request);
+    Task<Guid> CreateProductionCompanyAsync(ProductionCompanyCreateDto? dto);
+    Task<Guid> DeleteProductionCompanyById(Guid? id);
+    Task<Guid> UpdateProductionCompanyAsync(ProductionCompanyUpdateDto? dto);
+    Task<ProductionCompany> GetProductionCompanyByIdAsync(Guid? id);
 }
 
 

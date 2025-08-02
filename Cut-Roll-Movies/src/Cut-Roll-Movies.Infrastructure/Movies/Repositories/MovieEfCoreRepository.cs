@@ -1,13 +1,14 @@
+namespace Cut_Roll_Movies.Infrastructure.Movies.Repositories;
+
 using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Crews.Models;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.Movies.Repositories;
+using Cut_Roll_Movies.Core.People.Models;
 using Cut_Roll_Movies.Infrastructure.Common.Data;
 using Microsoft.EntityFrameworkCore;
-
-namespace Cut_Roll_Movies.Infrastructure.Movies.Repositories;
 
 public class MovieEfCoreRepository : IMovieRepository
 {
@@ -127,8 +128,8 @@ public class MovieEfCoreRepository : IMovieRepository
         var movie = new Movie()
         {
             Title = entity.Title,
-            Overview = entity.Overview, 
-            Rating = entity.Rating, 
+            Overview = entity.Overview,
+            Rating = entity.Rating,
             ImdbId = entity.ImdbId,
             Homepage = entity.Homepage,
             Revenue = entity.Revenue,
@@ -152,7 +153,7 @@ public class MovieEfCoreRepository : IMovieRepository
 
         if (movie == null)
             return null;
-        
+
         _context.Movies.Remove(movie);
         await _context.SaveChangesAsync();
 
@@ -165,48 +166,36 @@ public class MovieEfCoreRepository : IMovieRepository
 
         if (existingMovie == null)
             return null;
-        
+
         if (entity.Title != null)
             existingMovie.Title = entity.Title;
-        
+
         if (entity.Tagline != null)
             existingMovie.Tagline = entity.Tagline;
-        
+
         if (entity.Overview != null)
             existingMovie.Overview = entity.Overview;
-        
+
         if (entity.ReleaseDate.HasValue)
             existingMovie.ReleaseDate = entity.ReleaseDate;
-        
+
         if (entity.Runtime.HasValue)
             existingMovie.Runtime = entity.Runtime;
-        
+
         if (entity.Budget.HasValue)
             existingMovie.Budget = entity.Budget;
-        
+
         if (entity.Revenue.HasValue)
             existingMovie.Revenue = entity.Revenue;
-        
+
         if (entity.Homepage != null)
             existingMovie.Homepage = entity.Homepage;
-        
+
         if (entity.ImdbId != null)
             existingMovie.ImdbId = entity.ImdbId;
 
         await _context.SaveChangesAsync();
         return entity.Id;
-    }
-
-    public async Task<IEnumerable<Cast>> GetCastByMovieIdAsync(Guid movieId)
-    {
-        var res = await _context.Movies.Include(m => m.Cast).FirstOrDefaultAsync(m => m.Id == movieId);
-        return res?.Cast ?? [];
-    }
-
-    public async Task<IEnumerable<Crew>> GetCrewByMovieIdAsync(Guid movieId)
-    {
-        var res = await _context.Movies.Include(m => m.Cast).FirstOrDefaultAsync(m => m.Id == movieId);
-        return res?.Crew ?? [];
     }
 
 }

@@ -5,13 +5,13 @@ using Cut_Roll_Movies.Core.MovieImages.Models;
 
 public interface IMovieImageService
 {
-    Task<Guid> DeleteMovieImageByIdAsync(Guid id);
-    Task<Guid> CreateMovieGenreAsync(MovieImageCreateDto dto);
-    Task<bool> DeleteMovieImageRangeByMovieId(Guid movieId);
-    Task<IEnumerable<MovieImage>> GetMovieImagesByTypeAsync(Guid movieId, string type);
-    Task<IEnumerable<MovieImage>> GetMovieImagesByMovieIdAsync(Guid movieId);
-    Task<bool> BulkMovieImageCreateAsync(IEnumerable<MovieImageCreateDto> toCreate);
-    Task<bool> BulkMovieImageDeleteAsync(IEnumerable<MovieImageDeleteDto> toDelete);
+    Task<Guid> DeleteMovieImageByIdAsync(Guid? id);
+    Task<Guid> CreateMovieGenreAsync(MovieImageCreateDto? dto);
+    Task<bool> DeleteMovieImageRangeByMovieId(Guid? movieId);
+    Task<IEnumerable<MovieImage>> GetMovieImagesByTypeAsync(Guid? movieId, string? type);
+    Task<IEnumerable<MovieImage>> GetMovieImagesByMovieIdAsync(Guid? movieId);
+    Task<bool> BulkMovieImageCreateAsync(IEnumerable<MovieImageCreateDto?>? toCreate);
+    Task<bool> BulkMovieImageDeleteAsync(IEnumerable<MovieImageDeleteDto?>? toDelete);
 }
 
 

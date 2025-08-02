@@ -1,12 +1,13 @@
 namespace Cut_Roll_Movies.Core.SpokenLanguages.Repositories;
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.SpokenLanguages.Dtos;
 using Cut_Roll_Movies.Core.SpokenLanguages.Models;
 
 public interface ISpokenLanguageRepository
 {
-    Task<IEnumerable<SpokenLanguage>> GetAllAsync();
-    Task<IEnumerable<SpokenLanguage>> SearchByNameAsync(string name);
+    Task<PagedResult<SpokenLanguage>> GetAllAsync(SpokenLanguagePaginationDto dto);
+    Task<PagedResult<SpokenLanguage>> SearchByNameAsync(SpokenLanguageSearchByNameDto dto);
     Task<SpokenLanguage?> GetByIsoCodeAsync(string isoCode);
 }

@@ -1,3 +1,5 @@
+namespace Cut_Roll_Movies.Infrastructure.Common.Data;
+
 using Cut_Roll_Movies.Core.Casts.Configuration;
 using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Common.Models;
@@ -33,8 +35,6 @@ using Cut_Roll_Movies.Core.ProductionCompanies.Models;
 using Cut_Roll_Movies.Core.SpokenLanguages.Configurations;
 using Cut_Roll_Movies.Core.SpokenLanguages.Models;
 using Microsoft.EntityFrameworkCore;
-
-namespace Cut_Roll_Movies.Infrastructure.Common.Data;
 
 public class MovieDbContext(DbContextOptions<MovieDbContext> options) : DbContext(options)
 {
