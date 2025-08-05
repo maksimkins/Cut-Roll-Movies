@@ -1,15 +1,16 @@
 namespace Cut_Roll_Movies.Core.Keywords.Repositories;
 
+using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 using Cut_Roll_Movies.Core.Keywords.Dtos;
 using Cut_Roll_Movies.Core.Keywords.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 
 public interface IKeywordRepository : IDeleteByIdAsync<Guid, Guid?>, ICreateAsync<KeywordCreateDto, Guid?>,
-ISearchAsync<KeywordSearchDto, IEnumerable<Keyword>>
+ISearchAsync<KeywordSearchDto, PagedResult<Keyword>>, IGetByIdAsync<Guid, Keyword?>
 {
-    Task<IEnumerable<Keyword>> GetAllAsync();
-    Task<Keyword?> GetByIdAsync(Guid id);
-    Task<Keyword?> GetByNameAsync(string name);
+    Task<PagedResult<Keyword>> GetAllAsync(KeywordPaginationDto dto);
     Task<bool> ExistsAsync(Guid id);
     Task<bool> ExistsByNameAsync(string name);
 }

@@ -7,7 +7,7 @@ using Cut_Roll_Movies.Core.Crews.Models;
 
 public interface ICrewRepository : IUpdateAsync<CrewUpdateDto, Guid?>, IDeleteAsync<CrewDeleteDto, Guid?>,
     ICreateAsync<CrewCreateDto, Guid?>, ISearchAsync<CrewSearchDto, PagedResult<Crew>>, IBulkCreateAsync<CrewCreateDto, bool>,
-    IBulkDeleteAsync<CrewDeleteDto, bool>
+    IBulkDeleteAsync<CrewDeleteDto, bool>, IDeleteRangeById<Guid, bool>
 {
     public Task<PagedResult<Crew>> GetByMovieIdAsync(CrewGetByMovieId dto);
     public Task<PagedResult<Crew>> GetByPersonIdAsync(CrewGetByPersonId dto);

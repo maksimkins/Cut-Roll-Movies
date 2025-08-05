@@ -13,6 +13,6 @@ public interface IMovieProductionCompanyService
     Task<bool> DeleteMovieProductionCompanyRangeByMovieIdAsync(Guid? movieId);
     Task<IEnumerable<ProductionCompany>> GetCompaniesByMovieIdAsync(Guid? movieId);
     Task<PagedResult<Movie>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto? movieSearchByCompanyDto);
-    Task<bool> BulkCreateMovieProductionCompanyAsync(IEnumerable<MovieProductionCompanyDto?>? toCreate);
-    Task<bool> BulkDeleteMovieProductionCompanyAsync(IEnumerable<MovieProductionCompanyDto?>? toDelete);
+    Task<bool> BulkCreateMovieProductionCompanyAsync(IEnumerable<MovieProductionCompanyDto>? toCreate);
+    Task<bool> BulkDeleteMovieProductionCompanyAsync(IEnumerable<MovieProductionCompanyDto>? toDelete);
 }

@@ -10,7 +10,7 @@ public interface IProductionCompanyService
     Task<Guid> CreateProductionCompanyAsync(ProductionCompanyCreateDto? dto);
     Task<Guid> DeleteProductionCompanyById(Guid? id);
     Task<Guid> UpdateProductionCompanyAsync(ProductionCompanyUpdateDto? dto);
-    Task<ProductionCompany> GetProductionCompanyByIdAsync(Guid? id);
+    Task<ProductionCompany?> GetProductionCompanyByIdAsync(Guid? id);
 }
 
 

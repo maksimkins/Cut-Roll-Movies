@@ -7,7 +7,7 @@ using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 
 public interface ICastRepository : IUpdateAsync<CastUpdateDto, Guid?>, IDeleteAsync<CastDeleteDto, Guid?>,
     ICreateAsync<CastCreateDto, Guid?>, ISearchAsync<CastSearchDto, PagedResult<Cast>>, IBulkCreateAsync<CastCreateDto, bool>,
-    IBulkDeleteAsync<CastDeleteDto, bool>
+    IBulkDeleteAsync<CastDeleteDto, bool>, IDeleteRangeById<Guid, bool>
 {
     public Task<PagedResult<Cast>> GetByMovieIdAsync(CastGetByMovieIdDto dto);
     public Task<PagedResult<Cast>> GetByPersonIdAsync(CastGetByPersonIdDto dto);

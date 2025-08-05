@@ -13,6 +13,6 @@ public interface IMovieOriginCountryService
     Task<bool> DeleteMovieOriginCountryRangeByMovieIdAsync(Guid? movieId);
     Task<IEnumerable<Country>> GetCountriesByMovieIdAsync(Guid? movieId);
     Task<PagedResult<Movie>> GetMoviesByOriginCountryIdAsync(MovieSearchByCountryDto? movieSearchByCountryDto);
-    Task<bool> BulkCreateMovieOriginCountryAsync(IEnumerable<MovieOriginCountryDto?>? toCreate);
-    Task<bool> BulkDeleteMovieOriginCountryAsync(IEnumerable<MovieOriginCountryDto?>? toDelete);
+    Task<bool> BulkCreateMovieOriginCountryAsync(IEnumerable<MovieOriginCountryDto>? toCreate);
+    Task<bool> BulkDeleteMovieOriginCountryAsync(IEnumerable<MovieOriginCountryDto>? toDelete);
 }

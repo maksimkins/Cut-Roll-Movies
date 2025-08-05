@@ -10,11 +10,11 @@ public interface IMovieProductionCountryService
 {
     Task<Guid> CreateMovieProductionCountryAsync(MovieProductionCountryDto? dto);
     Task<Guid> DeleteMovieProductionCountryAsyncMovieProductionCountryAsync(MovieProductionCountryDto? dto);
-    Task<Guid> DeleteMovieProductionCountryRangeByMovieId(Guid? movieId);
+    Task<bool> DeleteMovieProductionCountryRangeByMovieId(Guid? movieId);
     Task<PagedResult<Movie>> GetMoviesByCountryIdAsync(MovieSearchByCountryDto? movieSearchByCountryDto);
     Task<IEnumerable<Country>> GetCountriesByMovieIdAsync(Guid? movieId);
-    Task<bool> BulkCreateMovieProductionCountryAsync(IEnumerable<MovieProductionCountryDto?>? toCreate);
-    Task<bool> BulkDeleteMovieProductionCountryAsync(IEnumerable<MovieProductionCountryDto?>? toDelete);
+    Task<bool> BulkCreateMovieProductionCountryAsync(IEnumerable<MovieProductionCountryDto>? toCreate);
+    Task<bool> BulkDeleteMovieProductionCountryAsync(IEnumerable<MovieProductionCountryDto>? toDelete);
 }
 
 

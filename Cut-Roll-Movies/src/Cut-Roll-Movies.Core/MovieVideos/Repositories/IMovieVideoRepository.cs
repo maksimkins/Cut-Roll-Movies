@@ -8,5 +8,5 @@ public interface IMovieVideoRepository : ICreateAsync<MovieVideoCreateDto, Guid?
 IDeleteRangeById<Guid, bool>, IUpdateAsync<MovieVideoUpdateDto, Guid?>
 {
     Task<IEnumerable<MovieVideo>> GetVideosByMovieIdAsync(Guid movieId);
-    Task<IEnumerable<MovieVideo>> GetVideosByTypeAsync(MovieVideoSearchDto movieVideoSearchDto);
+    Task<IEnumerable<MovieVideo>> GetVideosByTypeAsync(MovieVideoSearchDto dto);
 }

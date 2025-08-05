@@ -192,4 +192,13 @@ public class CrewEfCoreRepository : ICrewRepository
             PageSize = dto.PageSize
         };
     }
+
+    public async Task<bool> DeleteRangeById(Guid movieId)
+    {
+        var toDeletes = _dbContext.Crew.Where(g => g.MovieId == movieId);
+        _dbContext.Crew.RemoveRange(toDeletes);
+
+        var res = await _dbContext.SaveChangesAsync();
+        return res > 0;
+    }
 }

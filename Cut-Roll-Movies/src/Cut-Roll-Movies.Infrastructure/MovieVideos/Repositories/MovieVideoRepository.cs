@@ -1,5 +1,6 @@
 namespace Cut_Roll_Movies.Infrastructure.MovieVideos.Repositories;
 
+using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.MovieVideos.Dtos;
 using Cut_Roll_Movies.Core.MovieVideos.Models;
 using Cut_Roll_Movies.Core.MovieVideos.Repositories;

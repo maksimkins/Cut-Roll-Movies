@@ -176,4 +176,13 @@ public class CastEfCoreRepository : ICastRepository
             PageSize = request.PageSize
         };
     }
+
+    public async Task<bool> DeleteRangeById(Guid movieId)
+    {
+        var toDeletes = _dbContext.Cast.Where(g => g.MovieId == movieId);
+        _dbContext.Cast.RemoveRange(toDeletes);
+
+        var res = await _dbContext.SaveChangesAsync();
+        return res > 0;
+    }
 }
