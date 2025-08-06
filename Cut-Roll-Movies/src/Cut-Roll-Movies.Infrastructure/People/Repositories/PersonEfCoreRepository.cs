@@ -83,7 +83,7 @@ public class PersonEfCoreRepository : IPersonRepository
         var res = await _dbContext.SaveChangesAsync();
 
         return res > 0 ? toUpdate.Id :
-            throw new Exception(message: $"something went wrong while updating person with id:{entity.Id}");
+            throw new InvalidOperationException(message: $"something went wrong while updating person with id:{entity.Id}");
     }
 
     public async Task<PagedResult<Movie>> GetFilmographyAsync(MovieSearchByPesonIdDto dto)

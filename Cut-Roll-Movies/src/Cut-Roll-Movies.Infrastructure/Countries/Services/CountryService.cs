@@ -16,7 +16,7 @@ public class CountryService : ICountryService
     public async Task<PagedResult<Country>> GetAllCountriesAsync(ContryPaginationDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: $"{nameof(dto)}");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
 
         return await _countryRepository.GetAllAsync(dto);
     }
@@ -24,7 +24,7 @@ public class CountryService : ICountryService
     public async Task<Country?> GetCountryByIsoCodeAsync(string? isoCode)
     {
         if (isoCode == null)
-            throw new ArgumentException(message: $"{nameof(isoCode)}");
+            throw new ArgumentNullException($"missing {nameof(isoCode)}");
 
         return await _countryRepository.GetByIsoCodeAsync(isoCode);
     }
@@ -32,9 +32,9 @@ public class CountryService : ICountryService
     public async Task<PagedResult<Country>> SearchCountryByNameAsync(ContrySearchByNameDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: $"{nameof(dto)}");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
         if (dto.Name == null)
-            throw new ArgumentException(message: $"{nameof(dto.Name)}");
+            throw new ArgumentNullException($"missing {nameof(dto.Name)}");
 
         return await _countryRepository.SearchByNameAsync(dto);
     }

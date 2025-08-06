@@ -22,7 +22,7 @@ public class MovieGenreService : IMovieGenreService
     public async Task<bool> BulkCreateMovieGenreAsync(IEnumerable<MovieGenreDto>? toCreate)
     {
         if (toCreate == null || !toCreate.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
 
         foreach (var c in toCreate)
         {
@@ -46,7 +46,7 @@ public class MovieGenreService : IMovieGenreService
     public async Task<bool> BulkDeleteMovieGenreAsync(IEnumerable<MovieGenreDto>? toDelete)
     {
         if (toDelete == null || !toDelete.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
         
                 foreach (var c in toDelete)
         {
@@ -70,7 +70,7 @@ public class MovieGenreService : IMovieGenreService
     public async Task<Guid> CreateMovieGenreAsync(MovieGenreDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException("nothing to create");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (dto.GenreId == Guid.Empty)
@@ -80,13 +80,13 @@ public class MovieGenreService : IMovieGenreService
             throw new ArgumentException($"movie with id: {dto.MovieId} has already possess genre with id: {dto.GenreId}");
             
         return await _movieGenreRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not add genre to movie");
+            throw new InvalidOperationException(message: "could not add genre to movie");
     }
 
     public async Task<Guid?> DeleteMovieGenreAsync(MovieGenreDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to delete");
+            throw new ArgumentNullException("nothing to delete");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (dto.GenreId == Guid.Empty)
@@ -96,7 +96,7 @@ public class MovieGenreService : IMovieGenreService
             throw new ArgumentException($"movie with id: {dto.MovieId} has not possess genre with id: {dto.GenreId}");
 
         return await _movieGenreRepository.DeleteAsync(dto) ??
-            throw new Exception(message: "could not remove genre from movie");
+            throw new InvalidOperationException(message: "could not remove genre from movie");
     }
 
     public async Task<bool> DeleteMovieGenreRangeByMovieId(Guid? movieId)

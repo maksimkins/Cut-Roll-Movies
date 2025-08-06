@@ -14,7 +14,7 @@ public class SpokenLanguageService : ISpokenLanguageService
         _spokenLanguageRepository = spokenLanguageRepository ?? throw new Exception(nameof(spokenLanguageRepository));
     }
 
-    public async Task<PagedResult<SpokenLanguage>> GetAllSpokenLanguageAsync(SpokenLanguagePaginationDto dto)
+    public async Task<PagedResult<SpokenLanguage>> GetAllSpokenLanguageAsync(SpokenLanguagePaginationDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
@@ -29,7 +29,7 @@ public class SpokenLanguageService : ISpokenLanguageService
         return await _spokenLanguageRepository.GetByIsoCodeAsync(isoCode);
     }
 
-    public async Task<PagedResult<SpokenLanguage>> SearchSpokenLanguageByNameAsync(SpokenLanguageSearchByNameDto dto)
+    public async Task<PagedResult<SpokenLanguage>> SearchSpokenLanguageByNameAsync(SpokenLanguageSearchByNameDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

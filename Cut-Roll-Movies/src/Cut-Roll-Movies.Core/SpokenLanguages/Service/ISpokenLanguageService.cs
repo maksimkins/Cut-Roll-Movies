@@ -6,7 +6,7 @@ using Cut_Roll_Movies.Core.SpokenLanguages.Models;
 
 public interface ISpokenLanguageService
 {
-    Task<PagedResult<SpokenLanguage>> GetAllSpokenLanguageAsync(SpokenLanguagePaginationDto dto);
-    Task<PagedResult<SpokenLanguage>> SearchSpokenLanguageByNameAsync(SpokenLanguageSearchByNameDto dto);
+    Task<PagedResult<SpokenLanguage>> GetAllSpokenLanguageAsync(SpokenLanguagePaginationDto? dto);
+    Task<PagedResult<SpokenLanguage>> SearchSpokenLanguageByNameAsync(SpokenLanguageSearchByNameDto? dto);
     Task<SpokenLanguage?> GetSpokenLanguageByIsoCodeAsync(string? isoCode);
 }

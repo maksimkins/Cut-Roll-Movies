@@ -18,16 +18,16 @@ public class MovieSpokenLanguageService : IMovieSpokenLanguageService
     public async Task<bool> BulkCreateMovieSpokenLaguageAsync(IEnumerable<MovieSpokenLanguageDto>? toCreate)
     {
         if (toCreate == null || !toCreate.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
 
         foreach (var c in toCreate)
         {
             if (c == null)
                 throw new ArgumentNullException("one of the object is null");
             if (c.MovieId == Guid.Empty)
-                throw new ArgumentException($"missing {c.MovieId}");
+                throw new ArgumentNullException($"missing {c.MovieId}");
             if (string.IsNullOrEmpty(c.LanguageCode))
-                throw new ArgumentException($"missing {c.LanguageCode}");
+                throw new ArgumentNullException($"missing {c.LanguageCode}");
 
             var exists = await _movieSpokenLanguageRepository.ExistsAsync(c);
 
@@ -42,7 +42,7 @@ public class MovieSpokenLanguageService : IMovieSpokenLanguageService
     public async Task<bool> BulkDeleteeMovieSpokenLaguageAsync(IEnumerable<MovieSpokenLanguageDto>? toDelete)
     {
         if (toDelete == null || !toDelete.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to delete");
         
         foreach (var c in toDelete)
         {
@@ -65,7 +65,7 @@ public class MovieSpokenLanguageService : IMovieSpokenLanguageService
     public async Task<Guid> CreateMovieSpokenLanguageAsync(MovieSpokenLanguageDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (string.IsNullOrEmpty(dto.LanguageCode))
@@ -75,13 +75,13 @@ public class MovieSpokenLanguageService : IMovieSpokenLanguageService
             throw new ArgumentException($"movie with id: {dto.MovieId} has already possess spoken language with code: {dto.LanguageCode}");
             
         return await _movieSpokenLanguageRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not add production country to movie");
+            throw new InvalidOperationException(message: "could not add production country to movie");
     }
 
     public async Task<Guid> DeleteMovieSpokenLanguageAsync(MovieSpokenLanguageDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (string.IsNullOrEmpty(dto.LanguageCode))
@@ -91,7 +91,7 @@ public class MovieSpokenLanguageService : IMovieSpokenLanguageService
             throw new ArgumentException($"movie with id: {dto.MovieId} has not possess spoken language with code: {dto.LanguageCode}");
         
         return await _movieSpokenLanguageRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not delete production country from movie");
+            throw new InvalidOperationException(message: "could not delete production country from movie");
     }
 
     public async Task<bool> DeleteMovieSpokenLanguageRangeByMovieId(Guid? movieId)

@@ -20,16 +20,16 @@ public class MovieProductionCompanyService : IMovieProductionCompanyService
     public async Task<bool> BulkCreateMovieProductionCompanyAsync(IEnumerable<MovieProductionCompanyDto>? toCreate)
     {
         if (toCreate == null || !toCreate.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
 
         foreach (var c in toCreate)
         {
             if (c == null)
                 throw new ArgumentNullException("one of the object is null");
             if (c.MovieId == Guid.Empty)
-                throw new ArgumentException($"missing {c.MovieId}");
+                throw new ArgumentNullException($"missing {c.MovieId}");
             if (c.CompanyId == Guid.Empty)
-                throw new ArgumentException($"missing {c.CompanyId}");
+                throw new ArgumentNullException($"missing {c.CompanyId}");
 
             var exists = await _movieProductionCompanyRepository.ExistsAsync(c);
 
@@ -45,7 +45,7 @@ public class MovieProductionCompanyService : IMovieProductionCompanyService
     public async Task<bool> BulkDeleteMovieProductionCompanyAsync(IEnumerable<MovieProductionCompanyDto>? toDelete)
     {
         if (toDelete == null || !toDelete.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
         
         foreach (var c in toDelete)
         {
@@ -68,7 +68,7 @@ public class MovieProductionCompanyService : IMovieProductionCompanyService
     public async Task<Guid> CreateMovieProductionCompanyAsync(MovieProductionCompanyDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException("nothing to create");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (dto.CompanyId == Guid.Empty)
@@ -78,13 +78,13 @@ public class MovieProductionCompanyService : IMovieProductionCompanyService
             throw new ArgumentException($"movie with id: {dto.MovieId} has already possess company with id: {dto.CompanyId}");
             
         return await _movieProductionCompanyRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not add company to movie");
+            throw new InvalidOperationException(message: "could not add company to movie");
     }
 
     public async Task<Guid> DeleteMovieProductionCompanyAsync(MovieProductionCompanyDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to delete");
+            throw new ArgumentNullException("nothing to delete");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (dto.CompanyId == Guid.Empty)
@@ -94,7 +94,7 @@ public class MovieProductionCompanyService : IMovieProductionCompanyService
             throw new ArgumentException($"movie with id: {dto.MovieId} has not possess company with id: {dto.CompanyId}");
 
         return await _movieProductionCompanyRepository.DeleteAsync(dto) ??
-            throw new Exception(message: "could not remove company from movie");
+            throw new InvalidOperationException(message: "could not remove company from movie");
     }
 
     public async Task<bool> DeleteMovieProductionCompanyRangeByMovieIdAsync(Guid? movieId)

@@ -1,16 +1,15 @@
 namespace Cut_Roll_Movies.Infrastructure.MovieVideos.Repositories;
 
-using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.MovieVideos.Dtos;
 using Cut_Roll_Movies.Core.MovieVideos.Models;
 using Cut_Roll_Movies.Core.MovieVideos.Repositories;
 using Cut_Roll_Movies.Infrastructure.Common.Data;
 using Microsoft.EntityFrameworkCore;
 
-public class MovieVideoRepository : IMovieVideoRepository
+public class MovieVideoEfCoreRepository : IMovieVideoRepository
 {
     private readonly MovieDbContext _dbContext;
-    public MovieVideoRepository(MovieDbContext dbContext)
+    public MovieVideoEfCoreRepository(MovieDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -77,7 +76,6 @@ public class MovieVideoRepository : IMovieVideoRepository
         _dbContext.Videos.Update(toUpdate);
         var res = await _dbContext.SaveChangesAsync();
 
-        return res > 0 ? toUpdate.Id :
-            throw new Exception(message: $"something went wrong while updating video with id:{entity.Id}");
+        return res > 0 ? toUpdate.Id : null; 
     }
 }

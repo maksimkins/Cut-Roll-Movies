@@ -16,7 +16,7 @@ public class MovieVideoService : IMovieVideoService
     public async Task<Guid> CreateMovieVideoCreateAsync(MovieVideoCreateDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (string.IsNullOrEmpty(dto.Name))
@@ -29,16 +29,16 @@ public class MovieVideoService : IMovieVideoService
             throw new ArgumentNullException($"missing {nameof(dto.Key)}");
 
         return await _movieVideoRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not add video to movie");
+            throw new InvalidOperationException(message: "could not add video to movie");
     }
 
     public async Task<Guid> DeleteMovieVideoByIdAsync(Guid? id)
     {
         if (id == null || id == Guid.Empty)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException($"missing {nameof(id)}");
         
         return await _movieVideoRepository.DeleteByIdAsync(id.Value) ??
-            throw new Exception(message: "could not delete video from movie");
+            throw new InvalidOperationException(message: "could not delete video from movie");
     }
 
     public async Task<bool> DeleteMovieVideoRangeByMovieId(Guid? movieId)
@@ -60,7 +60,7 @@ public class MovieVideoService : IMovieVideoService
     public async Task<IEnumerable<MovieVideo>> GetVideosByTypeAsync(MovieVideoSearchDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: $"missing {nameof(dto)}");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
         if (dto.MovieId == null || dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (string.IsNullOrEmpty(dto.Type))
@@ -72,7 +72,7 @@ public class MovieVideoService : IMovieVideoService
     public async Task<Guid> UpdateMovieVideoAsync(MovieVideoUpdateDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException($"missing {nameof(dto)}");
         if (dto.Id == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.Id)}");
         if (string.IsNullOrEmpty(dto.Name))
@@ -85,6 +85,6 @@ public class MovieVideoService : IMovieVideoService
             throw new ArgumentNullException($"missing {nameof(dto.Key)}");
 
         return await _movieVideoRepository.UpdateAsync(dto) ??
-            throw new Exception(message: "could not update video for movie");
+            throw new InvalidOperationException(message: "could not update video for movie");
     }
 }

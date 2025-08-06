@@ -90,7 +90,6 @@ public class ProductionCompanyEfCoreRepository : IProductionCompanyRepository
         _dbContext.ProductionCompanies.Update(toUpdate);
         var res = await _dbContext.SaveChangesAsync();
 
-        return res > 0 ? toUpdate.Id :
-            throw new Exception(message: $"something went wrong while updating company with id:{entity.Id}");
+        return res > 0 ? toUpdate.Id : null;
     }
 }

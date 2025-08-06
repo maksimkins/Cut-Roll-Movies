@@ -76,6 +76,6 @@ public class PersonService : IPersonService
             throw new ArgumentNullException($"missing {nameof(dto.Name)} or {nameof(dto.ProfilePath)}");
 
         return await _personRepository.UpdateAsync(dto) ??
-            throw new Exception($"failed to update {nameof(Person)}");
+            throw new InvalidOperationException($"failed to update {nameof(Person)}");
     }
 }

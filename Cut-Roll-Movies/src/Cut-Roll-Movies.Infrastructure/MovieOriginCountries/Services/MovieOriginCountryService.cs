@@ -21,16 +21,16 @@ public class MovieOriginCountryService : IMovieOriginCountryService
     public async Task<bool> BulkCreateMovieOriginCountryAsync(IEnumerable<MovieOriginCountryDto>? toCreate)
     {
         if (toCreate == null || !toCreate.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
 
         foreach (var c in toCreate)
         {
             if (c == null)
                 throw new ArgumentNullException("one of the object is null");
             if (c.MovieId == Guid.Empty)
-                throw new ArgumentException($"missing {c.MovieId}");
+                throw new ArgumentNullException($"missing {c.MovieId}");
             if (string.IsNullOrEmpty(c.CountryCode))
-                throw new ArgumentException($"missing {c.CountryCode}");
+                throw new ArgumentNullException($"missing {c.CountryCode}");
 
             var exists = await _movieOriginCountryRepository.ExistsAsync(c);
 
@@ -45,7 +45,7 @@ public class MovieOriginCountryService : IMovieOriginCountryService
     public async Task<bool> BulkDeleteMovieOriginCountryAsync(IEnumerable<MovieOriginCountryDto>? toDelete)
     {
         if (toDelete == null || !toDelete.Any())
-            throw new ArgumentException(message: $"there is no instances to create");
+            throw new ArgumentNullException($"there is no instances to create");
         
                 foreach (var c in toDelete)
         {
@@ -69,7 +69,7 @@ public class MovieOriginCountryService : IMovieOriginCountryService
     public async Task<Guid> CreateMovieOriginCountryAsync(MovieOriginCountryDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException("nothing to create");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (string.IsNullOrEmpty(dto.CountryCode))
@@ -79,13 +79,13 @@ public class MovieOriginCountryService : IMovieOriginCountryService
             throw new ArgumentException($"movie with id: {dto.MovieId} has already possess origin country with code: {dto.CountryCode}");
             
         return await _movieOriginCountryRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not add origin country to movie");
+            throw new InvalidOperationException(message: "could not add origin country to movie");
     }
 
     public async Task<Guid> DeleteMovieOriginCountryAsync(MovieOriginCountryDto? dto)
     {
         if (dto == null)
-            throw new ArgumentException(message: "nothing to create");
+            throw new ArgumentNullException("nothing to create");
         if (dto.MovieId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (string.IsNullOrEmpty(dto.CountryCode))
@@ -95,7 +95,7 @@ public class MovieOriginCountryService : IMovieOriginCountryService
             throw new ArgumentException($"movie with id: {dto.MovieId} has not possess origin country with code: {dto.CountryCode}");
         
         return await _movieOriginCountryRepository.CreateAsync(dto) ??
-            throw new Exception(message: "could not delete origin country from movie");
+            throw new InvalidOperationException(message: "could not delete origin country from movie");
     }
 
     public async Task<bool> DeleteMovieOriginCountryRangeByMovieIdAsync(Guid? movieId)
