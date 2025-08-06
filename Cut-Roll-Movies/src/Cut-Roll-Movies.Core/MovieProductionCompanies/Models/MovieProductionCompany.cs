@@ -10,6 +10,7 @@ public class MovieProductionCompany
 {
     public Guid MovieId { get; set; }
     public Guid CompanyId { get; set; }
+    [JsonIgnore]
     public Movie Movie { get; set; }
     public ProductionCompany Company { get; set; }
 }

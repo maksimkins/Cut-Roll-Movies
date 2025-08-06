@@ -2,6 +2,7 @@
 
 namespace Cut_Roll_Movies.Core.MovieImages.Models;
 
+using System.Text.Json.Serialization;
 using Cut_Roll_Movies.Core.Movies.Models;
 
 public class MovieImage
@@ -10,5 +11,6 @@ public class MovieImage
     public Guid MovieId { get; set; }
     public required string Type { get; set; }
     public required string FilePath { get; set; }
+    [JsonIgnore]
     public Movie Movie { get; set; }
 }

@@ -16,56 +16,32 @@ public class CountryController : ControllerBase
         _countryService = countryService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] ContryPaginationDto? dto)
+    [HttpPost("all")]
+    public async Task<IActionResult> GetAll([FromBody] ContryPaginationDto? dto)
     {
         try
         {
             var result = await _countryService.GetAllCountriesAsync(dto);
             return Ok(result);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> SearchByName([FromQuery] ContrySearchByNameDto? dto)
+    [HttpPost("search")]
+    public async Task<IActionResult> SearchByName([FromBody] ContrySearchByNameDto? dto)
     {
         try
         {
             var result = await _countryService.SearchCountryByNameAsync(dto);
             return Ok(result);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
     [HttpGet("{isoCode}")]
@@ -76,21 +52,9 @@ public class CountryController : ControllerBase
             var result = await _countryService.GetCountryByIsoCodeAsync(isoCode);
             return Ok(result);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 }

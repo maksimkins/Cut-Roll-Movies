@@ -34,12 +34,12 @@ public class CrewEfCoreRepository : ICrewRepository
         return res > 0;
     }
 
-    public async Task<bool> BulkDeleteAsync(IEnumerable<CrewDeleteDto> listToDelete)
+    public async Task<bool> BulkDeleteAsync(IEnumerable<Guid> idsToDelete)
     {
-        foreach (var item in listToDelete)
+        foreach (var item in idsToDelete)
         {
             var crew = await _dbContext.Crew.FirstOrDefaultAsync(c =>
-                c.MovieId == item.MovieId && c.PersonId == item.PersonId);
+                c.Id == item);
 
             if (crew != null)
             {
@@ -64,26 +64,24 @@ public class CrewEfCoreRepository : ICrewRepository
         await _dbContext.Crew.AddAsync(crew);
         var res = await _dbContext.SaveChangesAsync();
 
-        return res > 0 ? entity.MovieId : null;
+        return res > 0 ? crew.Id : null;
     }
 
-    public async Task<Guid?> DeleteAsync(CrewDeleteDto entity)
+    public async Task<Guid?> DeleteByIdAsync(Guid id)
     {
         var crew = await _dbContext.Crew.FirstOrDefaultAsync(c =>
-            c.MovieId == entity.MovieId && c.PersonId == entity.PersonId);
+            c.Id == id);
 
         if (crew != null)
-            _dbContext.Remove(crew);
-            
+        {
+            _dbContext.Crew.Remove(crew);
+        }
+
         var res = await _dbContext.SaveChangesAsync();
-        return res > 0 ? entity.MovieId : null;
+
+        return res > 0 ? id : null;
     }
 
-    public async Task<bool> ExistsAsync(CrewDto dto)
-    {
-        return await _dbContext.Crew.AnyAsync(c =>
-            c.MovieId == dto.MovieId && c.PersonId == dto.PersonId);
-    }
 
     public async Task<IEnumerable<Crew>> GetByMovieIdAsync(Guid movieId)
     {
@@ -97,7 +95,7 @@ public class CrewEfCoreRepository : ICrewRepository
 
         if (dto.PageNumber < 1) dto.PageNumber = 1;
         if (dto.PageSize < 1) dto.PageSize = 10;
-        
+
         var totalCount = await query.CountAsync();
 
         query = query.
@@ -121,7 +119,7 @@ public class CrewEfCoreRepository : ICrewRepository
 
         if (dto.PageNumber < 1) dto.PageNumber = 1;
         if (dto.PageSize < 1) dto.PageSize = 10;
-        
+
         var totalCount = await query.CountAsync();
 
         query = query.
@@ -135,29 +133,29 @@ public class CrewEfCoreRepository : ICrewRepository
             Page = dto.PageNumber,
             PageSize = dto.PageSize
         };
-        
+
     }
 
     public async Task<Guid?> UpdateAsync(CrewUpdateDto entity)
     {
-        var crew = await _dbContext.Crew.FirstOrDefaultAsync(c => c.MovieId == entity.MovieId && c.PersonId == entity.PersonId);
+        var crew = await _dbContext.Crew.FirstOrDefaultAsync(c => c.Id == entity.Id);
         if (crew != null)
         {
             crew.Job = entity.Job ?? crew.Job;
             crew.Department = entity.Department ?? crew.Department;
 
             _dbContext.Crew.Update(crew);
-        }   
-        
+        }
+
         var res = await _dbContext.SaveChangesAsync();
 
-        return res > 0 ? entity.MovieId : null;
+        return res > 0 ? entity.Id : null;
     }
 
     public async Task<PagedResult<Crew>> SearchAsync(CrewSearchDto dto)
     {
         var query = _dbContext.Crew
-            .Include(c => c.Person) 
+            .Include(c => c.Person)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(dto.Name))
@@ -177,7 +175,7 @@ public class CrewEfCoreRepository : ICrewRepository
 
         if (dto.PageNumber < 1) dto.PageNumber = 1;
         if (dto.PageSize < 1) dto.PageSize = 10;
-        
+
         var totalCount = await query.CountAsync();
 
         query = query.
@@ -200,5 +198,10 @@ public class CrewEfCoreRepository : ICrewRepository
 
         var res = await _dbContext.SaveChangesAsync();
         return res > 0;
+    }
+    
+    public async Task<bool> ExistsByIdAsync(Guid id)
+    {
+        return await _dbContext.Crew.AnyAsync(c => c.Id == id);
     }
 }

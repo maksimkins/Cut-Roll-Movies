@@ -1,5 +1,6 @@
 #pragma warning disable CS8618
 
+using System.Text.Json.Serialization;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.SpokenLanguages.Models;
 
@@ -10,6 +11,7 @@ public class MovieSpokenLanguage
     public Guid MovieId { get; set; }
 
     public required string LanguageCode { get; set; }
+    [JsonIgnore]
 
     public Movie Movie { get; set; }
 

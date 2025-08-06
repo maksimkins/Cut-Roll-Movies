@@ -17,52 +17,8 @@ public class CrewController : ControllerBase
         _crewService = crewService;
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] CrewSearchDto? request)
-    {
-        try
-        {
-            var result = await _crewService.SearchCrewAsync(request);
-            return Ok(result);
-        }
-        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
-        catch (ArgumentException ex) { return NotFound(ex.Message); }
-        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
-        catch (Exception ex) { return this.InternalServerError(ex.Message); }
-    }
-
-    [HttpGet("by-movie/{movieId:guid}")]
-    public async Task<IActionResult> GetByMovieId([FromRoute] Guid movieId)
-    {
-        try
-        {
-            var dto = new CrewGetByMovieId { MovieId = movieId };
-            var result = await _crewService.GetCrewByMovieIdAsync(dto);
-            return Ok(result);
-        }
-        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
-        catch (ArgumentException ex) { return NotFound(ex.Message); }
-        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
-        catch (Exception ex) { return this.InternalServerError(ex.Message); }
-    }
-
-    [HttpGet("by-person/{personId:guid}")]
-    public async Task<IActionResult> GetByPersonId([FromRoute] Guid personId)
-    {
-        try
-        {
-            var dto = new CrewGetByPersonId { PersonId = personId };
-            var result = await _crewService.GetCrewByPersonIdAsync(dto);
-            return Ok(result);
-        }
-        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
-        catch (ArgumentException ex) { return NotFound(ex.Message); }
-        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
-        catch (Exception ex) { return this.InternalServerError(ex.Message); }
-    }
-
-    [Authorize(Roles = "Admin,Publisher")]
-    [HttpPost]
+    [HttpPost("create")]
+    [Authorize("Admin,Publisher")]
     public async Task<IActionResult> Create([FromBody] CrewCreateDto? dto)
     {
         try
@@ -76,23 +32,8 @@ public class CrewController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [Authorize(Roles = "Admin,Publisher")]
-    [HttpPost("bulk")]
-    public async Task<IActionResult> BulkCreate([FromBody] IEnumerable<CrewCreateDto>? crewList)
-    {
-        try
-        {
-            var success = await _crewService.BulkCreateCrewAsync(crewList);
-            return Ok(success);
-        }
-        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
-        catch (ArgumentException ex) { return NotFound(ex.Message); }
-        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
-        catch (Exception ex) { return this.InternalServerError(ex.Message); }
-    }
-
-    [Authorize(Roles = "Admin,Publisher")]
-    [HttpPut]
+    [HttpPut("update")]
+    [Authorize("Admin,Publisher")]
     public async Task<IActionResult> Update([FromBody] CrewUpdateDto? dto)
     {
         try
@@ -106,28 +47,13 @@ public class CrewController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [Authorize(Roles = "Admin,Publisher")]
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] CrewDeleteDto? dto)
+    [HttpDelete("delete/{id:guid}")]
+    [Authorize("Admin,Publisher")]
+    public async Task<IActionResult> DeleteById(Guid? id)
     {
         try
         {
-            var id = await _crewService.DeleteCrewAsync(dto);
-            return Ok(id);
-        }
-        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
-        catch (ArgumentException ex) { return NotFound(ex.Message); }
-        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
-        catch (Exception ex) { return this.InternalServerError(ex.Message); }
-    }
-
-    [Authorize(Roles = "Admin,Publisher")]
-    [HttpDelete("bulk")]
-    public async Task<IActionResult> BulkDelete([FromBody] IEnumerable<CrewDeleteDto>? crewList)
-    {
-        try
-        {
-            var result = await _crewService.BulkDeleteCrewAsync(crewList);
+            var result = await _crewService.DeleteCrewByIdAsync(id);
             return Ok(result);
         }
         catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
@@ -136,9 +62,81 @@ public class CrewController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [Authorize(Roles = "Admin,Publisher")]
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] CrewSearchDto? request)
+    {
+        try
+        {
+            var result = await _crewService.SearchCrewAsync(request);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
+    }
+
+    [HttpPost("by-movie")]
+    public async Task<IActionResult> GetByMovieId([FromBody] CrewGetByMovieId? dto)
+    {
+        try
+        {
+            var result = await _crewService.GetCrewByMovieIdAsync(dto);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
+    }
+
+    [HttpPost("by-person")]
+    public async Task<IActionResult> GetByPersonId([FromBody] CrewGetByPersonId? dto)
+    {
+        try
+        {
+            var result = await _crewService.GetCrewByPersonIdAsync(dto);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
+    }
+
+    [HttpPost("bulk-create")]
+    [Authorize("Admin,Publisher")]
+    public async Task<IActionResult> BulkCreate([FromBody] IEnumerable<CrewCreateDto>? crewList)
+    {
+        try
+        {
+            var result = await _crewService.BulkCreateCrewAsync(crewList);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
+    }
+
+    [HttpPost("bulk-delete")]
+    [Authorize("Admin,Publisher")]
+    public async Task<IActionResult> BulkDelete([FromBody] IEnumerable<Guid>? idsToDelete)
+    {
+        try
+        {
+            var result = await _crewService.BulkDeleteCrewAsync(idsToDelete);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
+    }
+
     [HttpDelete("delete-by-movie/{movieId:guid}")]
-    public async Task<IActionResult> DeleteByMovieId([FromRoute] Guid movieId)
+    [Authorize("Admin,Publisher")]
+    public async Task<IActionResult> DeleteRangeByMovieId([FromRoute] Guid? movieId)
     {
         try
         {

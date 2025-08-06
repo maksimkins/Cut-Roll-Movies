@@ -16,8 +16,8 @@ public class SpokenLanguageController : ControllerBase
         _spokenLanguageService = spokenLanguageService;
     }
 
-    [HttpGet("all")]
-    public async Task<IActionResult> GetAll([FromQuery] SpokenLanguagePaginationDto? dto)
+    [HttpPost("all")]
+    public async Task<IActionResult> GetAll([FromBody] SpokenLanguagePaginationDto? dto)
     {
         try
         {
@@ -30,8 +30,8 @@ public class SpokenLanguageController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> SearchByName([FromQuery] SpokenLanguageSearchByNameDto? dto)
+    [HttpPost("search")]
+    public async Task<IActionResult> SearchByName([FromBody] SpokenLanguageSearchByNameDto? dto)
     {
         try
         {

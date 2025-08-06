@@ -32,12 +32,12 @@ public class CastEfCoreRepository : ICastRepository
         return res > 0;
     }
 
- public async Task<bool> BulkDeleteAsync(IEnumerable<CastDeleteDto> listToDelete)
+ public async Task<bool> BulkDeleteAsync(IEnumerable<Guid> idsToDelete)
     {
-        foreach (var item in listToDelete)
+        foreach (var item in idsToDelete)
         {
             var cast = await _dbContext.Cast.FirstOrDefaultAsync(c =>
-                c.MovieId == item.MovieId && c.PersonId == item.PersonId);
+                c.Id == item);
 
             if (cast != null)
             {
@@ -62,27 +62,20 @@ public class CastEfCoreRepository : ICastRepository
         await _dbContext.Cast.AddAsync(cast);
         var res = await _dbContext.SaveChangesAsync();
 
-        return res > 0 ? entity.MovieId : null;
+        return res > 0 ? cast.Id : null;
     }
 
-    public async Task<Guid?> DeleteAsync(CastDeleteDto entity)
+    public async Task<Guid?> DeleteByIdAsync(Guid id)
     {
         var cast = await _dbContext.Cast.FirstOrDefaultAsync(c =>
-            c.MovieId == entity.MovieId && c.PersonId == entity.PersonId);
+            c.Id == id);
 
         if (cast != null)
             _dbContext.Remove(cast);
 
         var res = await _dbContext.SaveChangesAsync();
-        return res > 0 ? entity.MovieId : null;
+        return res > 0 ? id : null;
     }
-
-    public async Task<bool> ExistsAsync(CastDto dto)
-    {
-        return await _dbContext.Cast.AnyAsync(c =>
-            c.MovieId == dto.MovieId && c.PersonId == dto.PersonId);
-    }
-
 
     public async Task<PagedResult<Cast>> GetByMovieIdAsync(CastGetByMovieIdDto dto)
     {
@@ -129,7 +122,7 @@ public class CastEfCoreRepository : ICastRepository
 
     public async Task<Guid?> UpdateAsync(CastUpdateDto entity)
     {
-        var cast = await _dbContext.Cast.FirstOrDefaultAsync(c => c.MovieId == entity.MovieId && c.PersonId == entity.PersonId);
+        var cast = await _dbContext.Cast.FirstOrDefaultAsync(c => c.Id == entity.Id);
         if (cast != null)
         {
             cast.Character = entity.Character ?? cast.Character;
@@ -140,13 +133,14 @@ public class CastEfCoreRepository : ICastRepository
         
         var res = await _dbContext.SaveChangesAsync();
 
-        return res > 0 ? entity.MovieId : null;
+        return res > 0 ? entity.Id : null;
     }
 
     public async Task<PagedResult<Cast>> SearchAsync(CastSearchDto request)
     {
         var query = _dbContext.Cast
             .Include(c => c.Person) 
+            .Include(c => c.Movie)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.Name))
@@ -184,5 +178,10 @@ public class CastEfCoreRepository : ICastRepository
 
         var res = await _dbContext.SaveChangesAsync();
         return res > 0;
+    }
+
+    public async Task<bool> ExistsByIdAsync(Guid id)
+    {
+        return await _dbContext.Cast.AnyAsync(c => c.Id == id);
     }
 }

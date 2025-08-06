@@ -18,8 +18,8 @@ public class PersonController : ControllerBase
         _personService = personService;
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] PersonSearchRequest? request)
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] PersonSearchRequest? request)
     {
         try
         {
@@ -38,7 +38,7 @@ public class PersonController : ControllerBase
         try
         {
             var result = await _personService.GetPersonByIdAsync(id);
-            return result is not null ? Ok(result) : NotFound("Person not found.");
+            return result is not null ? Ok(result) : NotFound($"Person with id {id} not found.");
         }
         catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
         catch (ArgumentException ex) { return NotFound(ex.Message); }
@@ -91,8 +91,8 @@ public class PersonController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [HttpGet("filmography")]
-    public async Task<IActionResult> GetFilmography([FromQuery] MovieSearchByPesonIdDto? dto)
+    [HttpPost("filmography")]
+    public async Task<IActionResult> GetFilmography([FromBody] MovieSearchByPesonIdDto? dto)
     {
         try
         {

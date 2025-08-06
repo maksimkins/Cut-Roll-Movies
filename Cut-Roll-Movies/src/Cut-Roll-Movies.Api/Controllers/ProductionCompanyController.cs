@@ -17,8 +17,8 @@ public class ProductionCompanyController : ControllerBase
         _productionCompanyService = productionCompanyService;
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] ProductionCompanySearchRequest? request)
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] ProductionCompanySearchRequest? request)
     {
         try
         {

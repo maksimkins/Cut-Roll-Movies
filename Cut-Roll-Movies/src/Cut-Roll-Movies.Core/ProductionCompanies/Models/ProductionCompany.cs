@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Cut_Roll_Movies.Core.Countries.Models;
 using Cut_Roll_Movies.Core.MovieProductionCompanies.Models;
 
@@ -14,6 +15,7 @@ public class ProductionCompany
     public string? LogoPath { get; set; }
 
     public Country? Country { get; set; }
+    [JsonIgnore]
 
     public ICollection<MovieProductionCompany> MovieProductionCompanies { get; set; } = [];
 }

@@ -31,8 +31,8 @@ public class KeywordController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] KeywordSearchDto? dto)
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] KeywordSearchDto? dto)
     {
         try
         {

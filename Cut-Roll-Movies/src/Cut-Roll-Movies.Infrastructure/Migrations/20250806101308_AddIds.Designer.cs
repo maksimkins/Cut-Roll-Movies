@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cut_Roll_Movies.Infrastructure.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20250730134650_ChangeCrewCast")]
-    partial class ChangeCrewCast
+    [Migration("20250806101308_AddIds")]
+    partial class AddIds
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Casts.Models.Cast", b =>
                 {
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uuid");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<int>("CastOrder")
                         .HasColumnType("integer");
@@ -39,9 +38,17 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                     b.Property<string>("Character")
                         .HasColumnType("text");
 
-                    b.HasKey("PersonId", "MovieId");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("MovieId");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("cast", (string)null);
                 });
@@ -75,11 +82,10 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
 
             modelBuilder.Entity("Cut_Roll_Movies.Core.Crews.Models.Crew", b =>
                 {
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Department")
                         .HasColumnType("text");
@@ -87,7 +93,15 @@ namespace Cut_Roll_Movies.Infrastructure.Migrations
                     b.Property<string>("Job")
                         .HasColumnType("text");
 
-                    b.HasKey("MovieId", "PersonId");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
 
                     b.HasIndex("PersonId");
 

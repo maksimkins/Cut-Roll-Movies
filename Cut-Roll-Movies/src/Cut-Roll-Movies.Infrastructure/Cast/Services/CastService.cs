@@ -26,47 +26,30 @@ public class CastService : ICastService
                 throw new ArgumentNullException($"missing {c.MovieId}");
             if (c.PersonId == Guid.Empty)
                 throw new ArgumentNullException($"missing {c.PersonId}");
-
-            var exists = await _castRepository.ExistsAsync(new CastDto
-            {
-                MovieId = c.MovieId,
-                PersonId = c.PersonId,
-            });
-
-            if (exists)
-                throw new ArgumentException($"cast with MovieId: {c.MovieId} and PersonId: {c.PersonId} already exists");
             
         }
 
         return await _castRepository.BulkCreateAsync(toCreate);
     }
 
-    public async Task<bool> BulkDeleteCastAsync(IEnumerable<CastDeleteDto>? toDelete)
+    public async Task<bool> BulkDeleteCastAsync(IEnumerable<Guid>? idsToDelete)
     {
-        if (toDelete == null || !toDelete.Any())
+        if (idsToDelete == null || !idsToDelete.Any())
             throw new ArgumentNullException($"there is no instances to delete");
         
-                foreach (var c in toDelete)
+        foreach (var c in idsToDelete)
         {
-            if (c == null)
-                throw new ArgumentNullException("one of the object is null");
-            if (c.MovieId == Guid.Empty)
-                throw new ArgumentNullException($"missing {c.MovieId}");
-            if (c.PersonId == Guid.Empty)
-                throw new ArgumentNullException($"missing {c.PersonId}");
+            if (c == Guid.Empty)
+                throw new ArgumentNullException($"missing {c}");
 
-            var exists = await _castRepository.ExistsAsync(new CastDto
-            {
-                MovieId = c.MovieId,
-                PersonId = c.PersonId,
-            });
+            var exists = await _castRepository.ExistsByIdAsync(c);
 
             if (!exists)
-                throw new ArgumentException($"cannot find cast with MovieId: {c.MovieId} and PersonId: {c.PersonId}");
+                throw new ArgumentException($"cannot find cast with Id: {c}");
             
         }
 
-        return await _castRepository.BulkDeleteAsync(toDelete);
+        return await _castRepository.BulkDeleteAsync(idsToDelete);
     }
 
     public async Task<Guid> CreateCastAsync(CastCreateDto? dto)
@@ -80,34 +63,21 @@ public class CastService : ICastService
         if (dto.Character == null)
             throw new ArgumentNullException($"missing {nameof(dto.Character)}");
 
-        if (await _castRepository.ExistsAsync(new CastDto
-        {
-            MovieId = dto.MovieId,
-            PersonId = dto.PersonId,
-        }))
-            throw new ArgumentException($"cast with MovieId: {dto.MovieId} and PersonId: {dto.PersonId} already exists");
             
         return await _castRepository.CreateAsync(dto) ??
             throw new InvalidOperationException(message: "could not create cast");
     }
 
-    public async Task<Guid> DeleteCastAsync(CastDeleteDto? dto)
-    {
-        if (dto == null)
-            throw new ArgumentNullException("nothing to delete");
-        if (dto.MovieId == Guid.Empty)
-            throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
-        if (dto.PersonId == Guid.Empty)
-            throw new ArgumentNullException($"missing {nameof(dto.PersonId)}");
-        
-        if (!await _castRepository.ExistsAsync(new CastDto
-        {
-            MovieId = dto.MovieId,
-            PersonId = dto.PersonId,
-        }))
-            throw new ArgumentException($"cannot find cast with MovieId: {dto.MovieId} and PersonId: {dto.PersonId}");
 
-        return await _castRepository.DeleteAsync(dto) ??
+    public async Task<Guid> DeleteCastByIdAsync(Guid? id)
+    {
+        if (id == null || id == Guid.Empty)
+            throw new ArgumentNullException($"missing {nameof(id)}");
+        
+        if (!await _castRepository.ExistsByIdAsync(id.Value))
+            throw new ArgumentException($"cannot find cast with id: {id.Value}");
+
+        return await _castRepository.DeleteByIdAsync(id.Value) ??
             throw new InvalidOperationException(message: "could not delete cast");
     }
 
@@ -153,19 +123,11 @@ public class CastService : ICastService
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
-        if (dto.MovieId == Guid.Empty)
-            throw new ArgumentNullException($"missing {dto.MovieId}");
-        if (dto.PersonId == Guid.Empty)
-            throw new ArgumentNullException($"missing {dto.PersonId}");
-        if (dto.Character == null && dto.CastOrder == null)
-            throw new ArgumentNullException($"no arguments to update ({nameof(dto.Character)}, {dto.CastOrder})");
+        if (dto.Id == Guid.Empty)
+            throw new ArgumentNullException($"missing {dto.Id}");
 
-        if (!await _castRepository.ExistsAsync(new CastDto
-        {
-            MovieId = dto.MovieId,
-            PersonId = dto.PersonId,
-        }))
-            throw new ArgumentException($"cannot find cast with MovieId: {dto.MovieId} and PersonId: {dto.PersonId}");
+        if (!await _castRepository.ExistsByIdAsync(dto.Id))
+            throw new ArgumentException($"cannot find cast with id: {dto.Id}");
 
         return await _castRepository.UpdateAsync(dto) ??
             throw new InvalidOperationException(message: "could not update cast");

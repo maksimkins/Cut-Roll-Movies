@@ -16,36 +16,12 @@ public class CrewService : ICrewService
         _crewRepository = crewRepository ?? throw new Exception($"{nameof(_crewRepository)}");
     }
 
-    public async Task<bool> BulkCreateCrewAsync(IEnumerable<CrewCreateDto>? crewList)
+    public async Task<bool> BulkCreateCrewAsync(IEnumerable<CrewCreateDto>? toCreate)
     {
-        if (crewList == null || !crewList.Any())
+        if (toCreate == null || !toCreate.Any())
             throw new ArgumentNullException($"there is no instances to create");
 
-        foreach (var c in crewList)
-        {
-            if (c == null)
-                throw new ArgumentNullException("one of the object is null");
-
-            var exists = await _crewRepository.ExistsAsync(new CrewDto
-            {
-                MovieId = c.MovieId,
-                PersonId = c.PersonId,
-            });
-
-            if (exists)
-                throw new ArgumentException($"crew with MovieId: {c.MovieId} and PersonId: {c.PersonId} already exists");
-            
-        }
-
-        return await _crewRepository.BulkCreateAsync(crewList);
-    }
-
-    public async Task<bool> BulkDeleteCrewAsync(IEnumerable<CrewDeleteDto>? crewList)
-    {
-        if (crewList == null || !crewList.Any())
-            throw new ArgumentNullException($"there is no instances to delete");
-        
-                foreach (var c in crewList)
+        foreach (var c in toCreate)
         {
             if (c == null)
                 throw new ArgumentNullException("one of the object is null");
@@ -53,19 +29,30 @@ public class CrewService : ICrewService
                 throw new ArgumentNullException($"missing {c.MovieId}");
             if (c.PersonId == Guid.Empty)
                 throw new ArgumentNullException($"missing {c.PersonId}");
-
-            var exists = await _crewRepository.ExistsAsync(new CrewDto
-            {
-                MovieId = c.MovieId,
-                PersonId = c.PersonId,
-            });
-
-            if (!exists)
-                throw new ArgumentException($"cannot find crew with MovieId: {c.MovieId} and PersonId: {c.PersonId}");
             
         }
 
-        return await _crewRepository.BulkDeleteAsync(crewList);
+        return await _crewRepository.BulkCreateAsync(toCreate);
+    }
+
+    public async Task<bool> BulkDeleteCrewAsync(IEnumerable<Guid>? idsToDelete)
+    {
+        if (idsToDelete == null || !idsToDelete.Any())
+            throw new ArgumentNullException($"there is no instances to delete");
+        
+        foreach (var c in idsToDelete)
+        {
+            if (c == Guid.Empty)
+                throw new ArgumentNullException($"missing {c}");
+
+            var exists = await _crewRepository.ExistsByIdAsync(c);
+
+            if (!exists)
+                throw new ArgumentException($"cannot find cast with Id: {c}");
+            
+        }
+
+        return await _crewRepository.BulkDeleteAsync(idsToDelete);
     }
 
     public async Task<Guid> CreateCrewAsync(CrewCreateDto? dto)
@@ -76,39 +63,25 @@ public class CrewService : ICrewService
             throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
         if (dto.PersonId == Guid.Empty)
             throw new ArgumentNullException($"missing {nameof(dto.PersonId)}");
-        if (dto.Job == null)
+        if (string.IsNullOrEmpty(dto.Job))
             throw new ArgumentNullException($"missing {nameof(dto.Job)}");
-        if (dto.Department == null)
+        if (string.IsNullOrEmpty(dto.Department))
             throw new ArgumentNullException($"missing {nameof(dto.Department)}");
 
-        if (await _crewRepository.ExistsAsync(new CrewDto
-        {
-            MovieId = dto.MovieId,
-            PersonId = dto.PersonId,
-        }))
-            throw new ArgumentException($"crew with MovieId: {dto.MovieId} and PersonId: {dto.PersonId} already exists");
             
         return await _crewRepository.CreateAsync(dto) ??
             throw new InvalidOperationException(message: "could not create crew");
     }
 
-    public async Task<Guid> DeleteCrewAsync(CrewDeleteDto? dto)
+    public async Task<Guid> DeleteCrewByIdAsync(Guid? id)
     {
-        if (dto == null)
-            throw new ArgumentNullException("nothing to delete");
-        if (dto.MovieId == Guid.Empty)
-            throw new ArgumentNullException($"missing {nameof(dto.MovieId)}");
-        if (dto.PersonId == Guid.Empty)
-            throw new ArgumentNullException($"missing {nameof(dto.PersonId)}");
+        if (id == null || id == Guid.Empty)
+            throw new ArgumentNullException($"missing {nameof(id)}");
         
-        if (!await _crewRepository.ExistsAsync(new CrewDto
-        {
-            MovieId = dto.MovieId,
-            PersonId = dto.PersonId,
-        }))
-            throw new ArgumentException($"cannot find crew with MovieId: {dto.MovieId} and PersonId: {dto.PersonId}");
+        if (!await _crewRepository.ExistsByIdAsync(id.Value))
+            throw new ArgumentException($"cannot find crew with id: {id.Value}");
 
-        return await _crewRepository.DeleteAsync(dto) ??
+        return await _crewRepository.DeleteByIdAsync(id.Value) ??
             throw new InvalidOperationException(message: "could not delete crew");
     }
 
@@ -146,19 +119,13 @@ public class CrewService : ICrewService
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
-        if (dto.MovieId == Guid.Empty)
-            throw new ArgumentNullException($"missing {dto.MovieId}");
-        if (dto.PersonId == Guid.Empty)
-            throw new ArgumentNullException($"missing {dto.PersonId}");
+        if (dto.Id == Guid.Empty)
+            throw new ArgumentNullException($"missing {dto.Id}");
         if (dto.Job == null && dto.Department == null)
             throw new ArgumentNullException($"no arguments to update ({nameof(dto.Job)}, {dto.Department})");
 
-        if (!await _crewRepository.ExistsAsync(new CrewDto
-        {
-            MovieId = dto.MovieId,
-            PersonId = dto.PersonId,
-        }))
-            throw new ArgumentException($"cannot find crew with MovieId: {dto.MovieId} and PersonId: {dto.PersonId}");
+        if (!await _crewRepository.ExistsByIdAsync(dto.Id))
+            throw new ArgumentException($"cannot find crew with Id: {dto.Id}");
 
         return await _crewRepository.UpdateAsync(dto) ??
             throw new InvalidOperationException(message: "could not update crew");

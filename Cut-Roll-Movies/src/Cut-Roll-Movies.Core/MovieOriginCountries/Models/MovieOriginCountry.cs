@@ -10,6 +10,7 @@ public class MovieOriginCountry
 {
     public Guid MovieId { get; set; }
     public required string CountryCode { get; set; }
+    [JsonIgnore]
     public Movie Movie { get; set; }
     public Country Country { get; set; }
 }

@@ -17,8 +17,8 @@ public class GenreController : ControllerBase
         _genreService = genreService;
     }
 
-    [HttpGet("all")]
-    public async Task<IActionResult> GetAll([FromQuery] GenrePaginationDto? dto)
+    [HttpPost("all")]
+    public async Task<IActionResult> GetAll([FromBody] GenrePaginationDto? dto)
     {
         try
         {
@@ -31,8 +31,8 @@ public class GenreController : ControllerBase
         catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] GenreSearchDto? dto)
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] GenreSearchDto? dto)
     {
         try
         {

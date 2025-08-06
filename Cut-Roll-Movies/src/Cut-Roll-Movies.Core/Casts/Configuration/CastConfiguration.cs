@@ -9,7 +9,16 @@ public class CastConfiguration : IEntityTypeConfiguration<Cast>
     public void Configure(EntityTypeBuilder<Cast> builder)
     {
         builder.ToTable("cast")
-        .HasKey(mg => new { mg.PersonId, mg.MovieId });
+        .HasKey(mg => mg.Id);
+    
+        builder.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
+
+        builder.Property(c => c.MovieId)
+            .IsRequired();
+        
+        builder.Property(c => c.PersonId)
+            .IsRequired();
 
         builder.HasOne(c => c.Movie)
             .WithMany(m => m.Cast)

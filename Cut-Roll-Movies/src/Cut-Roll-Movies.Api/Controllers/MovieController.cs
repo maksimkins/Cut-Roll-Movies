@@ -6,7 +6,6 @@ using Cut_Roll_Movies.Core.Movies.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 [Route("api/[controller]")]
 [ApiController]
 public class MovieController : ControllerBase
@@ -18,30 +17,18 @@ public class MovieController : ControllerBase
         _movieService = movieService;
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] MovieSearchRequest? request)
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] MovieSearchRequest? request)
     {
         try
         {
             var result = await _movieService.SearchMovieAsync(request);
             return Ok(result);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
     [HttpGet("{id:guid}")]
@@ -50,27 +37,12 @@ public class MovieController : ControllerBase
         try
         {
             var result = await _movieService.GetMovieByIdAsync(id);
-            if (result == null)
-                return NotFound($"Movie with id {id} not found.");
-
-            return Ok(result);
+            return result is not null ? Ok(result) : NotFound($"Movie with id {id} not found.");
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
     [Authorize(Roles = "Admin,Publisher")]
@@ -82,22 +54,10 @@ public class MovieController : ControllerBase
             var id = await _movieService.CreateMovieAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id }, id);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
     [Authorize(Roles = "Admin,Publisher")]
@@ -109,22 +69,10 @@ public class MovieController : ControllerBase
             var id = await _movieService.UpdateMovieAsync(dto);
             return Ok(id);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
     [Authorize(Roles = "Admin,Publisher")]
@@ -136,27 +84,10 @@ public class MovieController : ControllerBase
             var deletedId = await _movieService.DeleteMovieByIdAsync(id);
             return Ok(deletedId);
         }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return this.InternalServerError(ex.Message);
-        }
-    }
-
-    private IActionResult BadRequest(string message)
-    {
-        throw new NotImplementedException();
+        catch (ArgumentNullException ex) { return BadRequest(ex.Message); }
+        catch (ArgumentException ex) { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
+        catch (Exception ex) { return this.InternalServerError(ex.Message); }
     }
 
     [HttpGet("count")]
@@ -172,4 +103,5 @@ public class MovieController : ControllerBase
             return this.InternalServerError(ex.Message);
         }
     }
+
 }

@@ -10,6 +10,7 @@ public class MovieKeyword
 {
     public Guid MovieId { get; set; }
     public Guid KeywordId { get; set; }
+    [JsonIgnore]
     public Movie Movie { get; set; }
     public Keyword Keyword { get; set; }
 }

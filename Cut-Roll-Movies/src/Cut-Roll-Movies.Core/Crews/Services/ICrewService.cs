@@ -7,12 +7,12 @@ using Cut_Roll_Movies.Core.Crews.Models;
 public interface ICrewService
 {
     Task<Guid> UpdateCrewAsync(CrewUpdateDto? dto);
-    Task<Guid> DeleteCrewAsync(CrewDeleteDto? dto);
+    Task<Guid> DeleteCrewByIdAsync(Guid? id);
     Task<Guid> CreateCrewAsync(CrewCreateDto? dto);
     Task<PagedResult<Crew>> SearchCrewAsync(CrewSearchDto? request);
     public Task<PagedResult<Crew>> GetCrewByMovieIdAsync(CrewGetByMovieId? dto);
     public Task<bool> BulkCreateCrewAsync(IEnumerable<CrewCreateDto>? crewList);
-    public Task<bool> BulkDeleteCrewAsync(IEnumerable<CrewDeleteDto>? crewList);
+    public Task<bool> BulkDeleteCrewAsync(IEnumerable<Guid>? idsToDelete);
     public Task<PagedResult<Crew>> GetCrewByPersonIdAsync(CrewGetByPersonId? dto);
     public Task<bool> DeleteCrewRangeByMovieIdAsync(Guid? movieId);
 }
