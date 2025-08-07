@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Keywords.Models;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.MovieKeywords.Dtos;
 using Cut_Roll_Movies.Core.MovieKeywords.Models;
 using Cut_Roll_Movies.Core.MovieKeywords.Repositories;
@@ -96,9 +97,10 @@ public class MovieKeywordEfCoreRepository : IMovieKeywordRepository
             Include(g => g.Keyword).Select(g => g.Keyword).ToListAsync();
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByKeywordIdAsync(MovieSearchByKeywordDto searchDto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByKeywordIdAsync(MovieSearchByKeywordDto searchDto)
     {
         var query = _dbContext.Movies
+            .Include(m => m.Images)
             .Include(m => m.Keywords)
             .ThenInclude(mg => mg.Keyword)
             .AsQueryable();
@@ -122,9 +124,16 @@ public class MovieKeywordEfCoreRepository : IMovieKeywordRepository
             Skip((searchDto.PageNumber - 1) * searchDto.PageSize)
             .Take(searchDto.PageSize);
 
-        return new PagedResult<Movie>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = searchDto.PageNumber,
             PageSize = searchDto.PageSize

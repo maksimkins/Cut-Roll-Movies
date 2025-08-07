@@ -113,7 +113,7 @@ public class MovieKeywordService : IMovieKeywordService
         return await _movieKeywordRepository.GetKeywordsByMovieIdAsync(movieId.Value);
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByKeywordIdAsync(MovieSearchByKeywordDto? dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByKeywordIdAsync(MovieSearchByKeywordDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

@@ -38,7 +38,7 @@ public class PersonService : IPersonService
             ?? throw new InvalidOperationException($"failed to delete {nameof(Person)}");
     }
 
-    public async Task<PagedResult<Movie>> GetFilmographyAsync(MovieSearchByPesonIdDto? searchByPersonIdDto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetFilmographyAsync(MovieSearchByPesonIdDto? searchByPersonIdDto)
     {
         if (searchByPersonIdDto == null)
             throw new ArgumentNullException($"missing {nameof(searchByPersonIdDto)}");

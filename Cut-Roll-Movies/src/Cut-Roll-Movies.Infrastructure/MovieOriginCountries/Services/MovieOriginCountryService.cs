@@ -114,7 +114,7 @@ public class MovieOriginCountryService : IMovieOriginCountryService
         return await _movieOriginCountryRepository.GetCountriesByMovieIdAsync(movieId.Value);
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByOriginCountryIdAsync(MovieSearchByCountryDto? dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByOriginCountryIdAsync(MovieSearchByCountryDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

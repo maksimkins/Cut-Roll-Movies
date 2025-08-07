@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Countries.Models;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.MovieOriginCountries.Dtos;
 using Cut_Roll_Movies.Core.MovieOriginCountries.Models;
 using Cut_Roll_Movies.Core.MovieOriginCountries.Repository;
@@ -96,11 +97,12 @@ public class MovieOriginCountryEfCoreRepository : IMovieOriginCountryRepository
             Include(g => g.Country).Select(g => g.Country).ToListAsync();
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByOriginCountryIdAsync(MovieSearchByCountryDto movieSearchByCountryDto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByOriginCountryIdAsync(MovieSearchByCountryDto movieSearchByCountryDto)
     {
         var query = _dbContext.Movies
-            .Include(m => m.Keywords)
-            .ThenInclude(mg => mg.Keyword)
+            .Include(m => m.Images)
+            .Include(m => m.OriginCountries)
+            .ThenInclude(mg => mg.Country)
             .AsQueryable();
 
         if (string.IsNullOrEmpty(movieSearchByCountryDto.Iso3166_1))
@@ -122,9 +124,16 @@ public class MovieOriginCountryEfCoreRepository : IMovieOriginCountryRepository
             Skip((movieSearchByCountryDto.PageNumber - 1) * movieSearchByCountryDto.PageSize)
             .Take(movieSearchByCountryDto.PageSize);
 
-        return new PagedResult<Movie>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = movieSearchByCountryDto.PageNumber,
             PageSize = movieSearchByCountryDto.PageSize

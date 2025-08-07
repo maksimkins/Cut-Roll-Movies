@@ -89,7 +89,7 @@ public class CastService : ICastService
         return await _castRepository.DeleteRangeById(movieId.Value);
     }
 
-    public async Task<PagedResult<Cast>> GetCastByMovieIdAsync(CastGetByMovieIdDto? dto)
+    public async Task<PagedResult<CastGetDto>> GetCastByMovieIdAsync(CastGetByMovieIdDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
@@ -99,7 +99,7 @@ public class CastService : ICastService
         return await _castRepository.GetByMovieIdAsync(dto);
     }
 
-    public async Task<PagedResult<Cast>> GetCastByPersonIdAsync(CastGetByPersonIdDto? dto)
+    public async Task<PagedResult<CastGetDto>> GetCastByPersonIdAsync(CastGetByPersonIdDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
@@ -109,7 +109,7 @@ public class CastService : ICastService
         return await _castRepository.GetByPersonIdAsync(dto);
     }
 
-    public async Task<PagedResult<Cast>> SearchCastAsync(CastSearchDto? dto)
+    public async Task<PagedResult<CastGetDto>> SearchCastAsync(CastSearchDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

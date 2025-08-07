@@ -12,6 +12,6 @@ public interface IMovieProductionCountryRepository : ICreateAsync<MovieProductio
 IDeleteRangeById<Guid, bool>, IBulkCreateAsync<MovieProductionCountryDto, bool>, IBulkDeleteAsync<MovieProductionCountryDto, bool>
 {
     Task<bool> ExistsAsync(MovieProductionCountryDto dto);
-    Task<PagedResult<Movie>> GetMoviesByCountryIdAsync(MovieSearchByCountryDto movieSearchByCountryDto);
+    Task<PagedResult<MovieSimplifiedDto>> GetMoviesByCountryIdAsync(MovieSearchByCountryDto movieSearchByCountryDto);
     Task<IEnumerable<Country>> GetCountriesByMovieIdAsync(Guid movieId);
 }

@@ -4,6 +4,7 @@ using Cut_Roll_Movies.Core.Genres.Models;
 using Cut_Roll_Movies.Core.MovieGenres.Dtos;
 using Cut_Roll_Movies.Core.MovieGenres.Models;
 using Cut_Roll_Movies.Core.MovieGenres.Repositories;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Infrastructure.Common.Data;
@@ -93,9 +94,10 @@ public class MovieGenreEfCoreRepository : IMovieGenreRepository
             Include(g => g.Genre).Select(g => g.Genre).ToListAsync();
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByGenreIdAsync(MovieSearchByGenreDto searchDto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByGenreIdAsync(MovieSearchByGenreDto searchDto)
     {
         var query = _dbContext.Movies
+            .Include(m => m.Images)
             .Include(m => m.MovieGenres)
             .ThenInclude(mg => mg.Genre)
             .AsQueryable();
@@ -118,10 +120,17 @@ public class MovieGenreEfCoreRepository : IMovieGenreRepository
         query = query.
             Skip((searchDto.PageNumber - 1) * searchDto.PageSize)
             .Take(searchDto.PageSize);
+        
+        var result = await query.ToListAsync();
 
-        return new PagedResult<Movie>()
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = searchDto.PageNumber,
             PageSize = searchDto.PageSize

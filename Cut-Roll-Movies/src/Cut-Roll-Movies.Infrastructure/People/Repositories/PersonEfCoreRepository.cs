@@ -1,6 +1,7 @@
 namespace Cut_Roll_Movies.Infrastructure.People.Repositories;
 
 using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.People.Dtos;
@@ -86,9 +87,10 @@ public class PersonEfCoreRepository : IPersonRepository
             throw new InvalidOperationException(message: $"something went wrong while updating person with id:{entity.Id}");
     }
 
-    public async Task<PagedResult<Movie>> GetFilmographyAsync(MovieSearchByPesonIdDto dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetFilmographyAsync(MovieSearchByPesonIdDto dto)
     {
         var query = _dbContext.Movies
+            .Include(m => m.Images)
             .Include(m => m.Cast)
             .ThenInclude(mg => mg.Person)
             .Include(m => m.Crew)
@@ -109,9 +111,16 @@ public class PersonEfCoreRepository : IPersonRepository
             Skip((dto.PageNumber - 1) * dto.PageSize)
             .Take(dto.PageSize);
 
-        return new PagedResult<Movie>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = dto.PageNumber,
             PageSize = dto.PageSize

@@ -7,6 +7,7 @@ using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Crews.Dtos;
 using Cut_Roll_Movies.Core.Crews.Models;
 using Cut_Roll_Movies.Core.Crews.Repositories;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Infrastructure.Common.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -83,14 +84,9 @@ public class CrewEfCoreRepository : ICrewRepository
     }
 
 
-    public async Task<IEnumerable<Crew>> GetByMovieIdAsync(Guid movieId)
+    public async Task<PagedResult<CrewGetDto>> GetByMovieIdAsync(CrewGetByMovieId dto)
     {
-        return await _dbContext.Crew.Where(c => c.MovieId == movieId).ToListAsync();
-    }
-
-    public async Task<PagedResult<Crew>> GetByMovieIdAsync(CrewGetByMovieId dto)
-    {
-        var query = _dbContext.Crew.AsQueryable();
+        var query = _dbContext.Crew.Include(c => c.Person).Include(c => c.Movie).ThenInclude(m => m.Images).AsQueryable();
         query = query.Where(c => c.PersonId == dto.MovieId);
 
         if (dto.PageNumber < 1) dto.PageNumber = 1;
@@ -102,18 +98,30 @@ public class CrewEfCoreRepository : ICrewRepository
             Skip((dto.PageNumber - 1) * dto.PageSize)
             .Take(dto.PageSize);
 
-        return new PagedResult<Crew>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<CrewGetDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(c => new CrewGetDto
+            {
+                MovieId = c.MovieId,
+                Title = c.Movie.Title,
+                Poster = c.Movie.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+                Person = c.Person,
+                Job = c.Job,
+                Department = c.Department,
+
+            }).ToList(),
+
             TotalCount = totalCount,
             Page = dto.PageNumber,
             PageSize = dto.PageSize
         };
     }
 
-    public async Task<PagedResult<Crew>> GetByPersonIdAsync(CrewGetByPersonId dto)
+    public async Task<PagedResult<CrewGetDto>> GetByPersonIdAsync(CrewGetByPersonId dto)
     {
-        var query = _dbContext.Crew.AsQueryable();
+        var query = _dbContext.Crew.Include(c => c.Person).Include(c => c.Movie).ThenInclude(m => m.Images).AsQueryable();
         query = query.Where(c => c.PersonId == dto.PersonId);
 
 
@@ -126,9 +134,21 @@ public class CrewEfCoreRepository : ICrewRepository
             Skip((dto.PageNumber - 1) * dto.PageSize)
             .Take(dto.PageSize);
 
-        return new PagedResult<Crew>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<CrewGetDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(c => new CrewGetDto
+            {
+                MovieId = c.MovieId,
+                Title = c.Movie.Title,
+                Poster = c.Movie.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+                Person = c.Person,
+                Job = c.Job,
+                Department = c.Department,
+
+            }).ToList(),
+
             TotalCount = totalCount,
             Page = dto.PageNumber,
             PageSize = dto.PageSize
@@ -152,10 +172,10 @@ public class CrewEfCoreRepository : ICrewRepository
         return res > 0 ? entity.Id : null;
     }
 
-    public async Task<PagedResult<Crew>> SearchAsync(CrewSearchDto dto)
+    public async Task<PagedResult<CrewGetDto>> SearchAsync(CrewSearchDto dto)
     {
         var query = _dbContext.Crew
-            .Include(c => c.Person)
+            .Include(c => c.Person).Include(c => c.Movie).ThenInclude(m => m.Images)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(dto.Name))
@@ -182,9 +202,21 @@ public class CrewEfCoreRepository : ICrewRepository
             Skip((dto.PageNumber - 1) * dto.PageSize)
             .Take(dto.PageSize);
 
-        return new PagedResult<Crew>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<CrewGetDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(c => new CrewGetDto
+            {
+                MovieId = c.MovieId,
+                Title = c.Movie.Title,
+                Poster = c.Movie.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+                Person = c.Person,
+                Job = c.Job,
+                Department = c.Department,
+
+            }).ToList(),
+
             TotalCount = totalCount,
             Page = dto.PageNumber,
             PageSize = dto.PageSize

@@ -78,7 +78,7 @@ public class MovieService : IMovieService
         return await _movieRepository.GetByIdAsync(id.Value);
     }
 
-    public async Task<PagedResult<Movie>> SearchMovieAsync(MovieSearchRequest? dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> SearchMovieAsync(MovieSearchRequest? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

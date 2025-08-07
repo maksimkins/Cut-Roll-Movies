@@ -3,7 +3,6 @@ namespace Cut_Roll_Movies.Core.MovieSpokenLanguages.Repositories;
 using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
 using Cut_Roll_Movies.Core.Movies.Dtos;
-using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.MovieSpokenLanguages.Dtos;
 using Cut_Roll_Movies.Core.SpokenLanguages.Models;
 
@@ -12,5 +11,5 @@ IDeleteRangeById<Guid, bool>, IBulkCreateAsync<MovieSpokenLanguageDto, bool>, IB
 {
     Task<IEnumerable<SpokenLanguage>> GetSpokenLanguagesByMovieIdAsync(Guid movieId);
     Task<bool> ExistsAsync(MovieSpokenLanguageDto dto);
-    Task<PagedResult<Movie>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto movieSearchByCountryDto);
+    Task<PagedResult<MovieSimplifiedDto>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto movieSearchByCountryDto);
 }

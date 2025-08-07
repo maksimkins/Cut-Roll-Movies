@@ -5,6 +5,7 @@ using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Casts.Repositories;
 using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Common.Repositories.Interfaces;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Infrastructure.Common.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -77,10 +78,10 @@ public class CastEfCoreRepository : ICastRepository
         return res > 0 ? id : null;
     }
 
-    public async Task<PagedResult<Cast>> GetByMovieIdAsync(CastGetByMovieIdDto dto)
+    public async Task<PagedResult<CastGetDto>> GetByMovieIdAsync(CastGetByMovieIdDto dto)
     {
         var query = _dbContext.Cast.AsQueryable();
-        query = query.Where(c => c.MovieId == dto.MovieId).Include(c => c.Person);
+        query = query.Where(c => c.MovieId == dto.MovieId).Include(c => c.Person).Include(c => c.Movie).ThenInclude(m => m.Images);
 
         var totalCount = await query.CountAsync();
 
@@ -88,9 +89,21 @@ public class CastEfCoreRepository : ICastRepository
             Skip((dto.PageNumber - 1) * dto.PageSize)
             .Take(dto.PageSize);
 
-        return new PagedResult<Cast>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<CastGetDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(c => new CastGetDto
+            {
+                MovieId = c.MovieId,
+                Title = c.Movie.Title,
+                Poster = c.Movie.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+                Person = c.Person,
+                Character = c.Character,
+                CastOrder = c.CastOrder,
+
+            }).ToList(),
+
             TotalCount = totalCount,
             Page = dto.PageNumber,
             PageSize = dto.PageSize
@@ -98,9 +111,9 @@ public class CastEfCoreRepository : ICastRepository
 
     }
 
-    public async Task<PagedResult<Cast>> GetByPersonIdAsync(CastGetByPersonIdDto dto)
+    public async Task<PagedResult<CastGetDto>> GetByPersonIdAsync(CastGetByPersonIdDto dto)
     {
-        var query = _dbContext.Cast.Include(i => i.Person).AsQueryable();
+        var query = _dbContext.Cast.Include(i => i.Person).Include(c => c.Movie).ThenInclude(m => m.Images).AsQueryable();
 
         query = query.Where(c => c.PersonId == dto.PersonId);
 
@@ -110,9 +123,21 @@ public class CastEfCoreRepository : ICastRepository
             Skip((dto.PageNumber - 1) * dto.PageSize)
             .Take(dto.PageSize);
 
-        return new PagedResult<Cast>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<CastGetDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(c => new CastGetDto
+            {
+                MovieId = c.MovieId,
+                Title = c.Movie.Title,
+                Poster = c.Movie.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+                Person = c.Person,
+                Character = c.Character,
+                CastOrder = c.CastOrder,
+
+            }).ToList(),
+
             TotalCount = totalCount,
             Page = dto.PageNumber,
             PageSize = dto.PageSize
@@ -136,11 +161,11 @@ public class CastEfCoreRepository : ICastRepository
         return res > 0 ? entity.Id : null;
     }
 
-    public async Task<PagedResult<Cast>> SearchAsync(CastSearchDto request)
+    public async Task<PagedResult<CastGetDto>> SearchAsync(CastSearchDto request)
     {
         var query = _dbContext.Cast
             .Include(c => c.Person) 
-            .Include(c => c.Movie)
+            .Include(c => c.Movie).ThenInclude(m => m.Images)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.Name))
@@ -162,9 +187,21 @@ public class CastEfCoreRepository : ICastRepository
             Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize);
 
-        return new PagedResult<Cast>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<CastGetDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(c => new CastGetDto
+            {
+                MovieId = c.MovieId,
+                Title = c.Movie.Title,
+                Poster = c.Movie.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+                Person = c.Person,
+                Character = c.Character,
+                CastOrder = c.CastOrder,
+
+            }).ToList(),
+
             TotalCount = totalCount,
             Page = request.PageNumber,
             PageSize = request.PageSize

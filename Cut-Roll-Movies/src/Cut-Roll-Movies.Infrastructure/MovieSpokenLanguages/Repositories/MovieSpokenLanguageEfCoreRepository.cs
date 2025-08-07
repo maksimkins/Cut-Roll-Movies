@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.MovieSpokenLanguages.Dtos;
@@ -90,11 +91,12 @@ public class MovieSpokenLanguageEfCoreRepository : IMovieSpokenLanguageRepositor
         return await _dbContext.MovieSpokenLanguages.AnyAsync(g => g.MovieId == dto.MovieId && g.LanguageCode == dto.LanguageCode);
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto movieSearchByCountryDto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto movieSearchByCountryDto)
     {
         var query = _dbContext.Movies
-            .Include(m => m.Keywords)
-            .ThenInclude(mg => mg.Keyword)
+            .Include(m => m.Images)
+            .Include(m => m.SpokenLanguages)
+            .ThenInclude(mg => mg.Language)
             .AsQueryable();
 
         if (string.IsNullOrEmpty(movieSearchByCountryDto.Iso639_1))
@@ -116,9 +118,16 @@ public class MovieSpokenLanguageEfCoreRepository : IMovieSpokenLanguageRepositor
             Skip((movieSearchByCountryDto.Page - 1) * movieSearchByCountryDto.PageSize)
             .Take(movieSearchByCountryDto.PageSize);
 
-        return new PagedResult<Movie>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = movieSearchByCountryDto.Page,
             PageSize = movieSearchByCountryDto.PageSize

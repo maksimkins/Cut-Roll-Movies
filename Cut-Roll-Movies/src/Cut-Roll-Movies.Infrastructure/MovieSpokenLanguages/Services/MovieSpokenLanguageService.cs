@@ -102,7 +102,7 @@ public class MovieSpokenLanguageService : IMovieSpokenLanguageService
         return await _movieSpokenLanguageRepository.DeleteRangeById(movieId.Value);
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto? dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesBySpokenLanguageIdAsync(MovieSearchBySpokenLanguageDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

@@ -13,7 +13,7 @@ public interface IPersonService
     Task<Guid> UpdatePersonAsync(PersonUpdateDto? dto);
     Task<Guid> DeletePersonByIdAsync(Guid? id);
     Task<Guid> CreatePersonAsync(PersonCreateDto? dto);
-    Task<PagedResult<Movie>> GetFilmographyAsync(MovieSearchByPesonIdDto? searchByPersonIdDto);
+    Task<PagedResult<MovieSimplifiedDto>> GetFilmographyAsync(MovieSearchByPesonIdDto? searchByPersonIdDto);
 
 
 }

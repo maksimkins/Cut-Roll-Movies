@@ -3,6 +3,7 @@ namespace Cut_Roll_Movies.Infrastructure.Movies.Repositories;
 using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Crews.Models;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.Movies.Repositories;
@@ -19,7 +20,7 @@ public class MovieEfCoreRepository : IMovieRepository
         _context = context;
     }
 
-    public async Task<PagedResult<Movie>> SearchAsync(MovieSearchRequest request)
+    public async Task<PagedResult<MovieSimplifiedDto>> SearchAsync(MovieSearchRequest request)
     {
         var query = _context.Movies.AsQueryable();
 
@@ -46,9 +47,16 @@ public class MovieEfCoreRepository : IMovieRepository
                 .ThenInclude(sl => sl.Language)
             .ToListAsync();
 
-        return new PagedResult<Movie>
+        var result = await query.ToListAsync();
+
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = movies,
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize

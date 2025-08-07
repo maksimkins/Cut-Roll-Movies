@@ -85,7 +85,7 @@ public class CrewService : ICrewService
             throw new InvalidOperationException(message: "could not delete crew");
     }
 
-    public async Task<PagedResult<Crew>> GetCrewByPersonIdAsync(CrewGetByPersonId? dto)
+    public async Task<PagedResult<CrewGetDto>> GetCrewByPersonIdAsync(CrewGetByPersonId? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
@@ -95,7 +95,7 @@ public class CrewService : ICrewService
         return await _crewRepository.GetByPersonIdAsync(dto);
     }
 
-    public async Task<PagedResult<Crew>> GetCrewByMovieIdAsync(CrewGetByMovieId? dto)
+    public async Task<PagedResult<CrewGetDto>> GetCrewByMovieIdAsync(CrewGetByMovieId? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
@@ -105,7 +105,7 @@ public class CrewService : ICrewService
         return await _crewRepository.GetByMovieIdAsync(dto);
     }
 
-    public async Task<PagedResult<Crew>> SearchCrewAsync(CrewSearchDto? dto)
+    public async Task<PagedResult<CrewGetDto>> SearchCrewAsync(CrewSearchDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

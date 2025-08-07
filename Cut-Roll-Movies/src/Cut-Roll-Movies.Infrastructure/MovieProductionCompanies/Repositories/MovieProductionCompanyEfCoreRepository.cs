@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cut_Roll_Movies.Core.Common.Dtos;
+using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.MovieProductionCompanies.Dtos;
 using Cut_Roll_Movies.Core.MovieProductionCompanies.Models;
 using Cut_Roll_Movies.Core.MovieProductionCompanies.Repositories;
@@ -96,11 +97,12 @@ public class MovieProductionCompanyEfCoreRepository : IMovieProductionCompanyRep
             Include(g => g.Company).Select(g => g.Company).ToListAsync();
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto movieSearchByCompanyDto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto movieSearchByCompanyDto)
     {
         var query = _dbContext.Movies
-            .Include(m => m.Keywords)
-            .ThenInclude(mg => mg.Keyword)
+            .Include(m => m.Images)
+            .Include(m => m.ProductionCompanies)
+            .ThenInclude(mg => mg.Company)
             .AsQueryable();
 
         if (movieSearchByCompanyDto.CompanyId != null)
@@ -122,9 +124,16 @@ public class MovieProductionCompanyEfCoreRepository : IMovieProductionCompanyRep
             Skip((movieSearchByCompanyDto.Page - 1) * movieSearchByCompanyDto.PageSize)
             .Take(movieSearchByCompanyDto.PageSize);
 
-        return new PagedResult<Movie>()
+        var result = await query.ToListAsync();
+
+        return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = await query.ToListAsync(),
+            Data = result.Select(m => new MovieSimplifiedDto
+            {
+                MovieId = m.Id,
+                Title = m.Title,
+                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToList(),
             TotalCount = totalCount,
             Page = movieSearchByCompanyDto.Page,
             PageSize = movieSearchByCompanyDto.PageSize

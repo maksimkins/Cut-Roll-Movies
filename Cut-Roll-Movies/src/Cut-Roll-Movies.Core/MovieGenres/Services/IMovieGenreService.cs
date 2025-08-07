@@ -4,7 +4,6 @@ using Cut_Roll_Movies.Core.Common.Dtos;
 using Cut_Roll_Movies.Core.Genres.Models;
 using Cut_Roll_Movies.Core.MovieGenres.Dtos;
 using Cut_Roll_Movies.Core.Movies.Dtos;
-using Cut_Roll_Movies.Core.Movies.Models;
 
 public interface IMovieGenreService
 {
@@ -12,7 +11,7 @@ public interface IMovieGenreService
     Task<Guid> CreateMovieGenreAsync(MovieGenreDto? dto);
     Task<bool> DeleteMovieGenreRangeByMovieId(Guid? movieId);
     Task<IEnumerable<Genre>> GetGenresByMovieIdAsync(Guid? movieId);
-    Task<PagedResult<Movie>> GetMoviesByGenreIdAsync(MovieSearchByGenreDto? dto);
+    Task<PagedResult<MovieSimplifiedDto>> GetMoviesByGenreIdAsync(MovieSearchByGenreDto? dto);
     public Task<bool> BulkCreateMovieGenreAsync(IEnumerable<MovieGenreDto>? toCreate);
     public Task<bool> BulkDeleteMovieGenreAsync(IEnumerable<MovieGenreDto>? toDelete);
 }

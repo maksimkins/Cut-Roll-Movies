@@ -6,7 +6,7 @@ using Cut_Roll_Movies.Core.Movies.Models;
 
 public interface IMovieService
 {
-    Task<PagedResult<Movie>> SearchMovieAsync(MovieSearchRequest? movieSearchRequest);
+    Task<PagedResult<MovieSimplifiedDto>> SearchMovieAsync(MovieSearchRequest? movieSearchRequest);
     Task<Movie?> GetMovieByIdAsync(Guid? id);
     Task<Guid> UpdateMovieAsync(MovieUpdateDto? dto);
     Task<Guid> DeleteMovieByIdAsync(Guid? id);

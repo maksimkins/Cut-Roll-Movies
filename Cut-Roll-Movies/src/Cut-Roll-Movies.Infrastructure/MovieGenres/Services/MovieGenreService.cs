@@ -115,7 +115,7 @@ public class MovieGenreService : IMovieGenreService
         return await _movieGenreRepository.GetGenresByMovieIdAsync(movieId.Value);
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByGenreIdAsync(MovieSearchByGenreDto? dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByGenreIdAsync(MovieSearchByGenreDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");

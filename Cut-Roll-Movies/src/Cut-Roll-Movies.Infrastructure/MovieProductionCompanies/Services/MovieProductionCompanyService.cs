@@ -113,7 +113,7 @@ public class MovieProductionCompanyService : IMovieProductionCompanyService
         return await _movieProductionCompanyRepository.GetCompaniesByMovieIdAsync(movieId.Value);
     }
 
-    public async Task<PagedResult<Movie>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto? dto)
+    public async Task<PagedResult<MovieSimplifiedDto>> GetMoviesByCompanyIdAsync(MovieSearchByCompanyDto? dto)
     {
         if (dto == null)
             throw new ArgumentNullException($"missing {nameof(dto)}");
