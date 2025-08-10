@@ -39,7 +39,7 @@ services:
     expose:
       - ${POSTGRES_PORT}
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "5434:${POSTGRES_PORT}"
     networks:
       - microservices-network
     volumes:
