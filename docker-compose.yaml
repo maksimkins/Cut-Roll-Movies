@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   cut-roll-movies:
-    image: cut-roll-movies
+    image: makedoniaz/cut-roll-movies:latest
     build:
       context: .
       dockerfile: app.Dockerfile
