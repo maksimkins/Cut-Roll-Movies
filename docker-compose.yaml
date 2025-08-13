@@ -23,13 +23,13 @@ services:
     volumes:
       - ./Data/SqlScripts:/app/SqlScripts
     depends_on:
-      - postgres
+      - postgres-movies
     networks:
       - microservices-network
     restart: always
 
   
-  postgres:
+  postgres-movies:
     image: postgres:latest
     container_name: movies_db_container
     environment:
@@ -39,7 +39,7 @@ services:
     expose:
       - ${POSTGRES_PORT}
     ports:
-      - "5434:${POSTGRES_PORT}"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
       - microservices-network
     volumes:
