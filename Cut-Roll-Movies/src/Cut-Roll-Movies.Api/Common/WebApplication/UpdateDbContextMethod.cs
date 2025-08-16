@@ -26,6 +26,8 @@ public static class UpdateDbContextMethod
         var sqlFolder = Path.Combine(AppContext.BaseDirectory, "SqlScripts");
         if (!Directory.Exists(sqlFolder))
         {
+            Console.Write("SqlScripts directory not found: " + sqlFolder);
+
             logger.LogWarning("SqlScripts directory not found: " + sqlFolder);
             return;
         }
@@ -38,6 +40,8 @@ public static class UpdateDbContextMethod
 
             if (wasExecuted)
             {
+                Console.Write($"Skipped already executed script: {scriptName}");
+
                 logger.LogInformation($"Skipped already executed script: {scriptName}");
                 continue;
             }
@@ -52,10 +56,15 @@ public static class UpdateDbContextMethod
                     ExecutedAt = DateTime.UtcNow
                 });
                 dbContext.SaveChanges();
+
+                Console.Write($"Successfully executed script: {scriptName}");
+
                 logger.LogInformation($"Successfully executed script: {scriptName}");
             }
             catch (Exception ex)
             {
+                Console.Write($"\n\n\n\n\n\n\nFailed to execute script: {scriptName}\n\n\n\n\n\n");
+
                 logger.LogError(ex, $"\n\n\n\n\n\n\nFailed to execute script: {scriptName}\n\n\n\n\n\n");
                 throw;
             }
