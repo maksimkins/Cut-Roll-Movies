@@ -16,14 +16,18 @@ public static class UpdateDbContextMethod
 
         dbContext.Database.Migrate();
 
-        // dbContext.Database.ExecuteSqlRaw(
-        //     @"CREATE TABLE IF NOT EXISTS ""ExecutedScripts"" (
-        //         ""ScriptName"" TEXT PRIMARY KEY,
-        //         ""ExecutedAt"" TIMESTAMP DEFAULT now()
-        //     );"
-        // );
+        dbContext.Database.ExecuteSqlRaw(
+            @"CREATE TABLE IF NOT EXISTS ""ExecutedScripts"" (
+                ""ScriptName"" TEXT PRIMARY KEY,
+                ""ExecutedAt"" TIMESTAMP DEFAULT now()
+            );"
+        );
+
 
         var sqlFolder = Path.Combine(AppContext.BaseDirectory, "SqlScripts");
+
+        Console.Write(sqlFolder);
+        
         if (!Directory.Exists(sqlFolder))
         {
             Console.Write("SqlScripts directory not found: " + sqlFolder);
