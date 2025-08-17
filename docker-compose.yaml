@@ -25,7 +25,7 @@ services:
     depends_on:
       - postgres-movies
     networks:
-      - microservices-network
+      - web
     restart: always
 
   
@@ -50,6 +50,6 @@ volumes:
   movies_db_volume:
 
 networks:
-  microservices-network:
+  web:
     external: true
 
