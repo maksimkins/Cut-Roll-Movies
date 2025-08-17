@@ -27,7 +27,7 @@ public static class UpdateDbContextMethod
         var sqlFolder = Path.Combine(AppContext.BaseDirectory, "SqlScripts");
 
         Console.Write(sqlFolder);
-        
+
         if (!Directory.Exists(sqlFolder))
         {
             Console.Write("SqlScripts directory not found: " + sqlFolder);
@@ -36,10 +36,18 @@ public static class UpdateDbContextMethod
             return;
         }
 
+        Console.WriteLine("SqlScripts directory FOUND\n\n");
+
         var sqlFiles = Directory.GetFiles(sqlFolder, "*.sql").OrderBy(f => f);
+
+        Console.WriteLine("SqlScripts directory FOUND\n\n");
+
         foreach (var file in sqlFiles)
         {
             var scriptName = Path.GetFileName(file);
+
+            Console.WriteLine("SCRIPT NAME: " + scriptName);
+
             var wasExecuted = dbContext.ExecutedScripts.Any(s => s.ScriptName == scriptName);
 
             if (wasExecuted)
