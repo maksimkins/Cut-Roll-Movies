@@ -7,7 +7,7 @@ using Cut_Roll_Movies.Core.MovieSpokenLanguages.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class MovieSpokenLanguageController : ControllerBase
 {

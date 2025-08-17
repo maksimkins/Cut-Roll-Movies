@@ -5,7 +5,7 @@ using Cut_Roll_Movies.Core.Countries.Dtos;
 using Cut_Roll_Movies.Core.Countries.Services;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class CountryController : ControllerBase
 {

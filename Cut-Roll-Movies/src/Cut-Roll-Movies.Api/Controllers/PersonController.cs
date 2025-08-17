@@ -7,7 +7,7 @@ using Cut_Roll_Movies.Core.People.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class PersonController : ControllerBase
 {

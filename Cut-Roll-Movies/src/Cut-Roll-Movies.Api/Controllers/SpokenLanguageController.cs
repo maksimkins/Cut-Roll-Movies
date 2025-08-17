@@ -5,7 +5,7 @@ using Cut_Roll_Movies.Core.SpokenLanguages.Dtos;
 using Cut_Roll_Movies.Core.SpokenLanguages.Service;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class SpokenLanguageController : ControllerBase
 {

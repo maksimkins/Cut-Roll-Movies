@@ -6,7 +6,7 @@ using Cut_Roll_Movies.Core.Movies.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class MovieController : ControllerBase
 {

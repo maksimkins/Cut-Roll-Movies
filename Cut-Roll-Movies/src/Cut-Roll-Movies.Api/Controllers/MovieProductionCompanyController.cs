@@ -10,7 +10,7 @@ using Cut_Roll_Movies.Core.Movies.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class MovieProductionCompanyController : ControllerBase
 {
