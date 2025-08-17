@@ -39,7 +39,7 @@ services:
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
-      - microservices-network
+      - web
     volumes:
       - movies_db_volume:/var/lib/postgresql/data
     restart: always
