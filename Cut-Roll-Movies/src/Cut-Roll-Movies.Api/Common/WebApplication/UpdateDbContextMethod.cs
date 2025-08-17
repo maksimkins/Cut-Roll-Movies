@@ -30,30 +30,20 @@ public static class UpdateDbContextMethod
 
         if (!Directory.Exists(sqlFolder))
         {
-            Console.Write("SqlScripts directory not found: " + sqlFolder);
-
             logger.LogWarning("SqlScripts directory not found: " + sqlFolder);
             return;
         }
 
-        Console.WriteLine("SqlScripts directory FOUND\n\n");
-
         var sqlFiles = Directory.GetFiles(sqlFolder, "*.sql").OrderBy(f => f);
-
-        Console.WriteLine("SqlScripts directory FOUND\n\n");
 
         foreach (var file in sqlFiles)
         {
             var scriptName = Path.GetFileName(file);
 
-            Console.WriteLine("SCRIPT NAME: " + scriptName);
-
             var wasExecuted = dbContext.ExecutedScripts.Any(s => s.ScriptName == scriptName);
 
             if (wasExecuted)
             {
-                Console.Write($"Skipped already executed script: {scriptName}");
-
                 logger.LogInformation($"Skipped already executed script: {scriptName}");
                 continue;
             }
@@ -68,15 +58,10 @@ public static class UpdateDbContextMethod
                     ExecutedAt = DateTime.UtcNow
                 });
                 dbContext.SaveChanges();
-
-                Console.Write($"Successfully executed script: {scriptName}");
-
                 logger.LogInformation($"Successfully executed script: {scriptName}");
             }
             catch (Exception ex)
             {
-                Console.Write($"\n\n\n\n\n\n\nFailed to execute script: {scriptName}\n\n\n\n\n\n");
-
                 logger.LogError(ex, $"\n\n\n\n\n\n\nFailed to execute script: {scriptName}\n\n\n\n\n\n");
                 throw;
             }
