@@ -20,8 +20,6 @@ services:
       
     ports:
       - 5002:80
-    volumes:
-      - ./Data/SqlScripts:/app/SqlScripts
     depends_on:
       - postgres-movies
     networks:
