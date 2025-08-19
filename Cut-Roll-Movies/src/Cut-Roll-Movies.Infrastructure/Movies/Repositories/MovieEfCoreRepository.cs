@@ -45,13 +45,13 @@ public class MovieEfCoreRepository : IMovieRepository
                 .ThenInclude(pc => pc.Country)
             .Include(m => m.SpokenLanguages)
                 .ThenInclude(sl => sl.Language)
+            .Include(m => m.Images)
             .ToListAsync();
 
-        var result = await query.ToListAsync();
 
         return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = result.Select(m => new MovieSimplifiedDto
+            Data = movies.Select(m => new MovieSimplifiedDto
             {
                 MovieId = m.Id,
                 Title = m.Title,
