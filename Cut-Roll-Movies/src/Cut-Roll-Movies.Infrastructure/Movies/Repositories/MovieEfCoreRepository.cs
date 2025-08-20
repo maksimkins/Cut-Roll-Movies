@@ -135,7 +135,7 @@ public class MovieEfCoreRepository : IMovieRepository
             .Include(m => m.Keywords)
             .Include(m => m.OriginCountries)
             .Include(m => m.Images)
-            .Include(m => m.Keywords)
+            .Include(m => m.Keywords).ThenInclude(k => k.Keyword)
             .AsSplitQuery()
             .FirstOrDefaultAsync(m => m.Id == id);
     }
