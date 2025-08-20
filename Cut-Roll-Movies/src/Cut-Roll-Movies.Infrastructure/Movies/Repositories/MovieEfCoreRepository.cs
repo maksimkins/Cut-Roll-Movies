@@ -113,11 +113,11 @@ public class MovieEfCoreRepository : IMovieRepository
     public async Task<Movie?> GetByIdAsync(Guid id)
     {
         return await _context.Movies
-            .Include(m => m.MovieGenres)
-            .Include(m => m.Cast)
-            .Include(m => m.Crew)
-            .Include(m => m.ProductionCompanies)
-            .Include(m => m.ProductionCountries)
+            .Include(m => m.MovieGenres).ThenInclude(mg => mg.Genre)
+            .Include(m => m.Cast).ThenInclude(c => c.Person)
+            .Include(m => m.Crew).ThenInclude(c => c.Person)
+            .Include(m => m.ProductionCompanies).ThenInclude(pc => pc.Company)
+            .Include(m => m.ProductionCountries).ThenInclude(pc => pc.Country)      
             .Include(m => m.SpokenLanguages)
             .Include(m => m.Videos)
             .Include(m => m.Keywords)
