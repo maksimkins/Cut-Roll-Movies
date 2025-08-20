@@ -9,7 +9,7 @@ services:
     container_name: movies_container
     environment:
       ASPNETCORE_URLS: "http://+:80"
-      POSTGRES_CONNECTION_STRING: "Host=${MOVIES_POSTGRES_HOST};Port=${MOVIES_POSTGRES_PORT};Username=${MOVIES_POSTGRES_USER};Password=${MOVIES_POSTGRES_PASSWORD};Database=${MOVIES_POSTGRES_DB};Pooling=true;"
+      POSTGRES_CONNECTION_STRING: "Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB};Pooling=true;"
       BLOB_STORAGE_CONNECTION_STRING: "DefaultEndpointsProtocol=${AZURE_BLOB_DEFAULT_PROTOCOL};AccountName=${AZURE_BLOB_ACCOUNT_NAME};AccountKey=${AZURE_BLOB_ACCOUNT_KEY};EndpointSuffix=${AZURE_BLOB_ENDPOINT_SUFFIX}"   
       JWT_KEY: "${JWT_KEY}"
       JWT_LIFE_TIME_IN_MINUTES: "15"
@@ -43,9 +43,9 @@ services:
     image: postgres:latest
     container_name: movies_db_container
     environment:
-      POSTGRES_USER: ${MOVIES_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${MOVIES_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${MOVIES_POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:                
       - "5345:${POSTGRES_PORT}"
     networks:
