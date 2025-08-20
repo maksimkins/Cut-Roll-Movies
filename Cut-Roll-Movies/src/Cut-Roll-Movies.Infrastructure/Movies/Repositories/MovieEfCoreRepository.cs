@@ -117,12 +117,13 @@ public class MovieEfCoreRepository : IMovieRepository
             .Include(m => m.Cast).ThenInclude(c => c.Person)
             .Include(m => m.Crew).ThenInclude(c => c.Person)
             .Include(m => m.ProductionCompanies).ThenInclude(pc => pc.Company)
-            .Include(m => m.ProductionCountries).ThenInclude(pc => pc.Country)      
+            .Include(m => m.ProductionCountries).ThenInclude(pc => pc.Country)
             .Include(m => m.SpokenLanguages)
             .Include(m => m.Videos)
             .Include(m => m.Keywords)
             .Include(m => m.OriginCountries)
             .Include(m => m.Images)
+            .Include(m => m.Keywords)
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 
