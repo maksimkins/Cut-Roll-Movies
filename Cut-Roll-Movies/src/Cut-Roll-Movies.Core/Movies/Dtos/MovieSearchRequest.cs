@@ -11,10 +11,10 @@ public class MovieSearchRequest
     public int PageSize { get; set; } = 10;
 
     public string? Title { get; set; }
-    public string? Genre { get; set; }
+    public List<string>? Genres { get; set; } = new List<string>();
     public string? Actor { get; set; }
     public string? Director { get; set; }
-    public string? Keyword { get; set; }
+    public List<string>? Keywords { get; set; } = new List<string>();
     public int? Year { get; set; }
     public float? MinRating { get; set; }
     public float? MaxRating { get; set; }

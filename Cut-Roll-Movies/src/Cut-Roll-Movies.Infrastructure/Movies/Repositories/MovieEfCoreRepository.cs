@@ -64,8 +64,16 @@ public class MovieEfCoreRepository : IMovieRepository
         if (!string.IsNullOrEmpty(request.Title))
             query = query.Where(m => m.Title.Contains(request.Title));
 
-        if (!string.IsNullOrEmpty(request.Genre))
-            query = query.Where(m => m.MovieGenres.Any(mg => mg.Genre.Name.Contains(request.Genre)));
+        if (request.Genres != null && request.Genres.Any())
+        {
+            request.Genres = request.Genres.Select(g => g.Trim()).Where(g => !string.IsNullOrEmpty(g)).ToList();
+            if (request.Genres.Any())
+                foreach (var genre in request.Genres)
+                {
+                    if (!string.IsNullOrEmpty(genre))
+                        query = query.Where(m => m.MovieGenres.Any(mg => mg.Genre.Name.Contains(genre)));
+                }
+        }
 
         if (!string.IsNullOrEmpty(request.Actor))
             query = query.Where(m => m.Cast.Any(c => c.Person.Name.Contains(request.Actor)));
@@ -73,8 +81,16 @@ public class MovieEfCoreRepository : IMovieRepository
         if (!string.IsNullOrEmpty(request.Director))
             query = query.Where(m => m.Crew.Any(c => c.Job == "Director" && c.Person.Name.Contains(request.Director)));
 
-        if (!string.IsNullOrEmpty(request.Keyword))
-            query = query.Where(m => m.Keywords.Any(k => k.Keyword.Name.Contains(request.Keyword)));
+        if (request.Keywords != null && request.Keywords.Any())
+        {
+            request.Keywords = request.Keywords.Select(g => g.Trim()).Where(g => !string.IsNullOrEmpty(g)).ToList();
+            if (request.Keywords.Any())
+                foreach (var keyword in request.Keywords)
+                {
+                    if (!string.IsNullOrEmpty(keyword))
+                        query = query.Where(m => m.Keywords.Any(mg => mg.Keyword.Name.Contains(keyword)));
+                }
+        }
 
         if (request.Year.HasValue)
             query = query.Where(m => m.ReleaseDate.HasValue && m.ReleaseDate.Value.Year == request.Year.Value);

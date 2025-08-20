@@ -20,7 +20,6 @@ public static class SetupVariablesMethod
         var rabbit_mq_password = Environment.GetEnvironmentVariable("RABBIT_MQ_PASSWORD") ?? throw new SystemException("there is no var RABBIT_MQ_PASSWORD");
 
 
-
         builder.Configuration["Jwt:Key"] = jwt_key;
         builder.Configuration["Jwt:LifeTimeInMinutes"] = jwt_life_time;
         builder.Configuration["Jwt:Issuer"] = jwt_issuer;
