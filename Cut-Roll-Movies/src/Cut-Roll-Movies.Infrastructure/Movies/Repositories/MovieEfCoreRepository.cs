@@ -1,13 +1,10 @@
 namespace Cut_Roll_Movies.Infrastructure.Movies.Repositories;
 
-using Cut_Roll_Movies.Core.Casts.Models;
 using Cut_Roll_Movies.Core.Common.Dtos;
-using Cut_Roll_Movies.Core.Crews.Models;
 using Cut_Roll_Movies.Core.MovieImages.Enums;
 using Cut_Roll_Movies.Core.Movies.Dtos;
 using Cut_Roll_Movies.Core.Movies.Models;
 using Cut_Roll_Movies.Core.Movies.Repositories;
-using Cut_Roll_Movies.Core.People.Models;
 using Cut_Roll_Movies.Infrastructure.Common.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +27,7 @@ public class MovieEfCoreRepository : IMovieRepository
 
         query = ApplySorting(query, request);
 
-        var movies = await query
+        var movies = query
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .Include(m => m.MovieGenres)
@@ -45,18 +42,17 @@ public class MovieEfCoreRepository : IMovieRepository
                 .ThenInclude(pc => pc.Country)
             .Include(m => m.SpokenLanguages)
                 .ThenInclude(sl => sl.Language)
-            .Include(m => m.Images)
-            .ToListAsync();
+            .Include(m => m.Images).AsSplitQuery();
 
 
         return new PagedResult<MovieSimplifiedDto>()
         {
-            Data = movies.Select(m => new MovieSimplifiedDto
+            Data = await movies.Select( m => new MovieSimplifiedDto
             {
                 MovieId = m.Id,
                 Title = m.Title,
-                Poster = m.Images?.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
-            }).ToList(),
+                Poster = m.Images.FirstOrDefault(i => i.Type == ImageTypes.poster.ToString()),
+            }).ToListAsync(),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
@@ -124,6 +120,7 @@ public class MovieEfCoreRepository : IMovieRepository
             .Include(m => m.OriginCountries)
             .Include(m => m.Images)
             .Include(m => m.Keywords)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 

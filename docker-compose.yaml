@@ -8,18 +8,21 @@ services:
       dockerfile: app.Dockerfile
     container_name: movies_container
     environment:
-      ASPNETCORE_URLS: http://+:80 
-      POSTGRES_CONNECTION_STRING: "Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB};Pooling=true;"
+      ASPNETCORE_URLS: "http://+:80"
+      POSTGRES_CONNECTION_STRING: "Host=${MOVIES_POSTGRES_HOST};Port=${MOVIES_POSTGRES_PORT};Username=${MOVIES_POSTGRES_USER};Password=${MOVIES_POSTGRES_PASSWORD};Database=${MOVIES_POSTGRES_DB};Pooling=true;"
+      BLOB_STORAGE_CONNECTION_STRING: "DefaultEndpointsProtocol=${AZURE_BLOB_DEFAULT_PROTOCOL};AccountName=${AZURE_BLOB_ACCOUNT_NAME};AccountKey=${AZURE_BLOB_ACCOUNT_KEY};EndpointSuffix=${AZURE_BLOB_ENDPOINT_SUFFIX}"   
       JWT_KEY: "${JWT_KEY}"
-      JWT_LIFE_TIME_IN_MINUTES: "${JWT_LIFE_TIME_IN_MINUTES}"
+      JWT_LIFE_TIME_IN_MINUTES: "15"
       JWT_ISSUER: "${JWT_ISSUER}"
       JWT_AUDIENCE: "${JWT_AUDIENCE}"
       RABBIT_MQ_HOSTNAME: "${RABBIT_MQ_HOSTNAME}"
       RABBIT_MQ_USERNAME: "${RABBIT_MQ_USERNAME}"
       RABBIT_MQ_PASSWORD: "${RABBIT_MQ_PASSWORD}"
-      
-    ports:
-      - 5002:80
+      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
+      BLOB_STORAGE_CONTAINER_NAME: "${BLOB_STORAGE_CONTAINER_NAME}"
+      BLOB_STORAGE_DIRECTORY: "${BLOB_STORAGE_DIRECTORY}"
+    expose:
+      - "80"
     volumes:
       - ./Data/SqlScripts:/app/SqlScripts
     depends_on:
@@ -27,19 +30,24 @@ services:
     networks:
       - web
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.movies.rule=Host(`cutnroll.it.com`) && PathPrefix(`/api/movies`)"
+      - "traefik.http.routers.movies.entrypoints=websecure"
+      - "traefik.http.routers.movies.tls.certresolver=myresolver"
+      - "traefik.http.services.movies.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.movies-strip-prefix.stripprefix.prefixes=/api/movies"
+      - "traefik.http.routers.movies.middlewares=movies-strip-prefix"
 
-  
   postgres-movies:
     image: postgres:latest
     container_name: movies_db_container
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    expose:
-      - ${POSTGRES_PORT}
-    ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      POSTGRES_USER: ${MOVIES_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${MOVIES_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${MOVIES_POSTGRES_DB}
+    ports:                
+      - "5345:${POSTGRES_PORT}"
     networks:
       - web
     volumes:
@@ -48,8 +56,3 @@ services:
 
 volumes:
   movies_db_volume:
-
-networks:
-  web:
-    external: true
-
