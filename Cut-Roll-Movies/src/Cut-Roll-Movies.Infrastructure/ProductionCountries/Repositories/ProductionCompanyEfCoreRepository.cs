@@ -53,13 +53,14 @@ public class ProductionCompanyEfCoreRepository : IProductionCompanyRepository
     {
         var query = _dbContext.ProductionCompanies.AsQueryable();
 
-        if (string.IsNullOrEmpty(request.Name))
-        {
-            query = query.Where(m => m.Name == request.Name);
-        }
-        else if (string.IsNullOrEmpty(request.CountryCode))
+        if (!string.IsNullOrEmpty(request.CountryCode))
         {
             query = query.Where(m => m.CountryCode == request.CountryCode);
+        }
+        else if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+        var name = $"%{request.Name.Trim()}%";
+        query = query.Where(m => EF.Functions.ILike(m.Name, name));
         }
 
         var totalCount = await query.CountAsync();

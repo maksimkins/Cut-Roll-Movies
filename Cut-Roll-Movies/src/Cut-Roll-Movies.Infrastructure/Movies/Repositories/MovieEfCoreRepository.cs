@@ -61,35 +61,56 @@ public class MovieEfCoreRepository : IMovieRepository
 
     private IQueryable<Movie> ApplyFilters(IQueryable<Movie> query, MovieSearchRequest request)
     {
-        if (!string.IsNullOrEmpty(request.Title))
-            query = query.Where(m => m.Title.Contains(request.Title));
+        if (!string.IsNullOrWhiteSpace(request.Title))
+        {
+            var title = $"%{request.Title.Trim()}%";
+            query = query.Where(m => EF.Functions.ILike(m.Title, title));
+        }
 
         if (request.Genres != null && request.Genres.Any())
         {
-            request.Genres = request.Genres.Select(g => g.Trim()).Where(g => !string.IsNullOrEmpty(g)).ToList();
-            if (request.Genres.Any())
-                foreach (var genre in request.Genres)
+            var genres = request.Genres
+                .Select(g => g.Trim())
+                .Where(g => !string.IsNullOrEmpty(g))
+                .ToList();
+
+            if (genres.Any())
+            {
+                foreach (var genre in genres)
                 {
-                    if (!string.IsNullOrEmpty(genre))
-                        query = query.Where(m => m.MovieGenres.Any(mg => mg.Genre.Name.Contains(genre)));
+                    var g = $"%{genre}%";
+                    query = query.Where(m => m.MovieGenres.Any(mg => EF.Functions.ILike(mg.Genre.Name, g)));
                 }
+            }
         }
 
-        if (!string.IsNullOrEmpty(request.Actor))
-            query = query.Where(m => m.Cast.Any(c => c.Person.Name.Contains(request.Actor)));
+        if (!string.IsNullOrWhiteSpace(request.Actor))
+        {
+            var actor = $"%{request.Actor.Trim()}%";
+            query = query.Where(m => m.Cast.Any(c => EF.Functions.ILike(c.Person.Name, actor)));
+        }
 
-        if (!string.IsNullOrEmpty(request.Director))
-            query = query.Where(m => m.Crew.Any(c => c.Job == "Director" && c.Person.Name.Contains(request.Director)));
+        if (!string.IsNullOrWhiteSpace(request.Director))
+        {
+            var director = $"%{request.Director.Trim()}%";
+            query = query.Where(m => m.Crew.Any(c => c.Job == "Director" && EF.Functions.ILike(c.Person.Name, director)));
+        }
 
         if (request.Keywords != null && request.Keywords.Any())
         {
-            request.Keywords = request.Keywords.Select(g => g.Trim()).Where(g => !string.IsNullOrEmpty(g)).ToList();
-            if (request.Keywords.Any())
-                foreach (var keyword in request.Keywords)
+            var keywords = request.Keywords
+                .Select(k => k.Trim())
+                .Where(k => !string.IsNullOrEmpty(k))
+                .ToList();
+
+            if (keywords.Any())
+            {
+                foreach (var keyword in keywords)
                 {
-                    if (!string.IsNullOrEmpty(keyword))
-                        query = query.Where(m => m.Keywords.Any(mg => mg.Keyword.Name.Contains(keyword)));
+                    var k = $"%{keyword}%";
+                    query = query.Where(m => m.Keywords.Any(mk => EF.Functions.ILike(mk.Keyword.Name, k)));
                 }
+            }
         }
 
         if (request.Year.HasValue)
@@ -101,14 +122,21 @@ public class MovieEfCoreRepository : IMovieRepository
         if (request.MaxRating.HasValue)
             query = query.Where(m => m.VoteAverage <= request.MaxRating.Value);
 
-        if (!string.IsNullOrEmpty(request.Country))
-            query = query.Where(m => m.ProductionCountries.Any(pc => pc.Country.Name.Contains(request.Country)));
+        if (!string.IsNullOrWhiteSpace(request.Country))
+        {
+            var country = $"%{request.Country.Trim()}%";
+            query = query.Where(m => m.ProductionCountries.Any(pc => EF.Functions.ILike(pc.Country.Name, country)));
+        }
 
-        if (!string.IsNullOrEmpty(request.Language))
-            query = query.Where(m => m.SpokenLanguages.Any(sl => sl.Language.EnglishName.Contains(request.Language)));
+        if (!string.IsNullOrWhiteSpace(request.Language))
+        {
+            var language = $"%{request.Language.Trim()}%";
+            query = query.Where(m => m.SpokenLanguages.Any(sl => EF.Functions.ILike(sl.Language.EnglishName, language)));
+        }
 
         return query;
     }
+
 
     private IQueryable<Movie> ApplySorting(IQueryable<Movie> query, MovieSearchRequest request)
     {

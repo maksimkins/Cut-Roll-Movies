@@ -180,18 +180,22 @@ public class CrewEfCoreRepository : ICrewRepository
 
         if (!string.IsNullOrWhiteSpace(dto.Name))
         {
-            query = query.Where(c => c.Person.Name.Contains(dto.Name));
+            var name = $"%{dto.Name.Trim()}%";
+            query = query.Where(c => EF.Functions.ILike(c.Person.Name, name));
         }
 
         if (!string.IsNullOrWhiteSpace(dto.JobTitle))
         {
-            query = query.Where(c => c.Job != null && c.Job.Contains(dto.JobTitle));
+            var job = $"%{dto.JobTitle.Trim()}%";
+            query = query.Where(c => c.Job != null && EF.Functions.ILike(c.Job, job));
         }
 
         if (!string.IsNullOrWhiteSpace(dto.Department))
         {
-            query = query.Where(c => c.Department != null && c.Department.Contains(dto.Department));
+            var department = $"%{dto.Department.Trim()}%";
+            query = query.Where(c => c.Department != null && EF.Functions.ILike(c.Department, department));
         }
+
 
         if (dto.PageNumber < 1) dto.PageNumber = 1;
         if (dto.PageSize < 1) dto.PageSize = 10;

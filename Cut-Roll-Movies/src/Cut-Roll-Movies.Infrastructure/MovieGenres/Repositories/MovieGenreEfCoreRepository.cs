@@ -109,7 +109,8 @@ public class MovieGenreEfCoreRepository : IMovieGenreRepository
 
         else if (!string.IsNullOrWhiteSpace(searchDto.Name))
         {
-            query = query.Where(m => m.MovieGenres.Any(k => k.Genre.Name.Contains(searchDto.Name)));
+            var name = $"%{searchDto.Name.Trim()}%";
+            query = query.Where(m => m.MovieGenres.Any(k => EF.Functions.ILike(k.Genre.Name, name)));
         }
 
         if (searchDto.PageNumber < 1) searchDto.PageNumber = 1;

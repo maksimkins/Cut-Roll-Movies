@@ -105,14 +105,15 @@ public class MovieProductionCountryEfCoreRepository : IMovieProductionCountryRep
             .ThenInclude(mg => mg.Company)
             .AsQueryable();
 
-        if (string.IsNullOrEmpty(movieSearchByCountryDto.Iso3166_1))
+        if (!string.IsNullOrEmpty(movieSearchByCountryDto.Iso3166_1))
         {
             query = query.Where(m => m.ProductionCountries.Any(mg => mg.CountryCode == movieSearchByCountryDto.Iso3166_1));
         }
 
         else if (!string.IsNullOrWhiteSpace(movieSearchByCountryDto.Name))
         {
-            query = query.Where(m => m.ProductionCountries.Any(k => k.Country.Name.Contains(movieSearchByCountryDto.Name)));
+            var name = $"%{movieSearchByCountryDto.Name.Trim()}%";
+            query = query.Where(m => m.ProductionCountries.Any(k => EF.Functions.ILike(k.Country.Name, name)));
         }
 
         if (movieSearchByCountryDto.PageNumber < 1) movieSearchByCountryDto.PageNumber = 1;

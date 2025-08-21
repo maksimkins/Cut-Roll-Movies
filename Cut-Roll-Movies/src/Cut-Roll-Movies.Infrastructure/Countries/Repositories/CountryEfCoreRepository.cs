@@ -45,7 +45,12 @@ public class CountryEfCoreRepository : ICountryRepository
     {
         var query = _dbContext.Countries.AsQueryable();
 
-        query = query.Where(c => c.Name.Contains(dto.Name));
+        if (!string.IsNullOrWhiteSpace(dto.Name))
+        {
+            var name = $"%{dto.Name.Trim()}%";
+            query = query.Where(c => EF.Functions.ILike(c.Name, name));
+        }
+        
         var totalCount = await query.CountAsync();
 
         query = query.

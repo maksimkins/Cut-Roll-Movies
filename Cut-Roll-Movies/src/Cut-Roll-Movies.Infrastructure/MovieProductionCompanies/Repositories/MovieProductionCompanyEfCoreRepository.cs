@@ -112,8 +112,10 @@ public class MovieProductionCompanyEfCoreRepository : IMovieProductionCompanyRep
 
         else if (!string.IsNullOrWhiteSpace(movieSearchByCompanyDto.Name))
         {
-            query = query.Where(m => m.ProductionCompanies.Any(k => k.Company.Name.Contains(movieSearchByCompanyDto.Name)));
+            var name = $"%{movieSearchByCompanyDto.Name.Trim()}%";
+            query = query.Where(m => m.ProductionCompanies.Any(k => EF.Functions.ILike(k.Company.Name, name)));
         }
+
 
         if (movieSearchByCompanyDto.Page < 1) movieSearchByCompanyDto.Page = 1;
         if (movieSearchByCompanyDto.PageSize < 1) movieSearchByCompanyDto.PageSize = 10;

@@ -99,14 +99,15 @@ public class MovieSpokenLanguageEfCoreRepository : IMovieSpokenLanguageRepositor
             .ThenInclude(mg => mg.Language)
             .AsQueryable();
 
-        if (string.IsNullOrEmpty(movieSearchByCountryDto.Iso639_1))
+        if (!string.IsNullOrEmpty(movieSearchByCountryDto.Iso639_1))
         {
             query = query.Where(m => m.SpokenLanguages.Any(mg => mg.LanguageCode == movieSearchByCountryDto.Iso639_1));
         }
 
         else if (!string.IsNullOrWhiteSpace(movieSearchByCountryDto.EnglishName))
         {
-            query = query.Where(m => m.SpokenLanguages.Any(k => k.Language.EnglishName.Contains(movieSearchByCountryDto.EnglishName)));
+            var name = $"%{movieSearchByCountryDto.EnglishName.Trim()}%";
+            query = query.Where(m => m.SpokenLanguages.Any(k => EF.Functions.ILike(k.Language.EnglishName, name)));
         }
 
         if (movieSearchByCountryDto.Page < 1) movieSearchByCountryDto.Page = 1;

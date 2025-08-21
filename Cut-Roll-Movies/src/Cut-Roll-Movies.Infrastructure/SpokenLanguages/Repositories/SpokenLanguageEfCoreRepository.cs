@@ -45,7 +45,11 @@ public class SpokenLanguageEfCoreRepository : ISpokenLanguageRepository
     {
         var query = _dbContext.SpokenLanguages.AsQueryable();
 
-        query = query.Where(l => l.EnglishName.Contains(dto.Name));
+        if (!string.IsNullOrWhiteSpace(dto.Name))
+        {
+            var name = $"%{dto.Name.Trim()}%";
+            query = query.Where(l => EF.Functions.ILike(l.EnglishName, name));
+        }
 
         var totalCount = await query.CountAsync();
 

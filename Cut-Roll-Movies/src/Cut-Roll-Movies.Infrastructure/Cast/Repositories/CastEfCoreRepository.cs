@@ -170,12 +170,14 @@ public class CastEfCoreRepository : ICastRepository
 
         if (!string.IsNullOrWhiteSpace(request.Name))
         {
-            query = query.Where(c => c.Person.Name.Contains(request.Name));
+            var name = $"%{request.Name.Trim()}%";
+            query = query.Where(c => EF.Functions.ILike(c.Person.Name, name));
         }
-
+        
         if (!string.IsNullOrWhiteSpace(request.CharacterName))
         {
-            query = query.Where(c => c.Character != null && c.Character.Contains(request.CharacterName));
+            var character = $"%{request.CharacterName.Trim()}%";
+            query = query.Where(c => c.Character != null && EF.Functions.ILike(c.Character, character));
         }
 
         if (request.PageNumber < 1) request.PageNumber = 1;

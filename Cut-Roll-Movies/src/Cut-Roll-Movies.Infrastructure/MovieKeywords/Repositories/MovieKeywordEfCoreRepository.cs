@@ -112,8 +112,10 @@ public class MovieKeywordEfCoreRepository : IMovieKeywordRepository
 
         else if (!string.IsNullOrWhiteSpace(searchDto.Name))
         {
-            query = query.Where(m => m.Keywords.Any(k => k.Keyword.Name.Contains(searchDto.Name)));
+            var name = $"%{searchDto.Name.Trim()}%";
+            query = query.Where(m => m.Keywords.Any(k => EF.Functions.ILike(k.Keyword.Name, name)));
         }
+
 
         if (searchDto.PageNumber < 1) searchDto.PageNumber = 1;
         if (searchDto.PageSize < 1) searchDto.PageSize = 10;

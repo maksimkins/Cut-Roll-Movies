@@ -80,7 +80,11 @@ public class GenreEfCoreRepository : IGenreRepository
     {
         var query = _dbContext.Genres.AsQueryable();
 
-        query = query.Where(g => g.Name.Contains(request.Name));
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            request.Name = request.Name.Trim();
+            query = query.Where(g => EF.Functions.ILike(g.Name, $"%{request.Name}%"));
+        }
 
         if (request.PageNumber < 1) request.PageNumber = 1;
         if (request.PageSize < 1) request.PageSize = 10;

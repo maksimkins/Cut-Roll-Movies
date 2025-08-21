@@ -51,9 +51,10 @@ public class PersonEfCoreRepository : IPersonRepository
     {
         var query = _dbContext.People.AsQueryable();
 
-        if (string.IsNullOrEmpty(request.Name))
+        if (!string.IsNullOrWhiteSpace(request.Name))
         {
-            query = query.Where(m => m.Name == request.Name);
+            var name = $"%{request.Name.Trim()}%";
+            query = query.Where(m => EF.Functions.ILike(m.Name, name));
         }
 
         var totalCount = await query.CountAsync();

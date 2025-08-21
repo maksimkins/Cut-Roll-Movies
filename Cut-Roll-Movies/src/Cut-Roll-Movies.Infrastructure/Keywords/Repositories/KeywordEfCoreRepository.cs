@@ -80,8 +80,12 @@ public class KeywordEfCoreRepository : IKeywordRepository
     {
         var query = _dbContext.Keywords.AsQueryable();
 
-        query = query.Where(g => g.Name.Contains(request.Name));
-
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            var name = $"%{request.Name.Trim()}%";
+            query = query.Where(g => EF.Functions.ILike(g.Name, name));
+        }
+        
         if (request.PageNumber < 1) request.PageNumber = 1;
         if (request.PageSize < 1) request.PageSize = 10;
 
