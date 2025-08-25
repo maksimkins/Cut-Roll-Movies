@@ -49,13 +49,23 @@ public class PersonEfCoreRepository : IPersonRepository
 
     public async Task<PagedResult<Person>> SearchAsync(PersonSearchRequest request)
     {
-        var query = _dbContext.People.AsQueryable();
+        var query = _dbContext.People.Include(p => p.CastRoles).Include(p => p.CrewRoles).AsQueryable();
+
+        if (request.role != null && request.role.HasValue)
+        {
+            query = request.role.Value.ToString().ToLower() switch
+            {
+                "crew" => query.Where(p => p.CrewRoles.Any()),
+                "cast" => query.Where(p => p.CastRoles.Any()),
+                _ => query
+            };
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Name))
-        {
-            var name = $"%{request.Name.Trim()}%";
-            query = query.Where(m => EF.Functions.ILike(m.Name, name));
-        }
+            {
+                var name = $"%{request.Name.Trim()}%";
+                query = query.Where(m => EF.Functions.ILike(m.Name, name));
+            }
 
         var totalCount = await query.CountAsync();
         query = query

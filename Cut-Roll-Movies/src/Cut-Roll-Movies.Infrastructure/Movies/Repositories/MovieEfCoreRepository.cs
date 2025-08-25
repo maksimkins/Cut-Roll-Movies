@@ -93,7 +93,7 @@ public class MovieEfCoreRepository : IMovieRepository
         if (!string.IsNullOrWhiteSpace(request.Director))
         {
             var director = $"%{request.Director.Trim()}%";
-            query = query.Where(m => m.Crew.Any(c => c.Job == "Director" && EF.Functions.ILike(c.Person.Name, director)));
+            query = query.Where(m => m.Crew.Any(c => EF.Functions.ILike(c.Person.Name, director)));
         }
 
         if (request.Keywords != null && request.Keywords.Any())
