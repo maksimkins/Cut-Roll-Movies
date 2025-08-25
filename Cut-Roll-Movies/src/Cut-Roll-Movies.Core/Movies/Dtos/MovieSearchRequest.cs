@@ -14,6 +14,7 @@ public class MovieSearchRequest
     public List<string>? Genres { get; set; } = new List<string>();
     public string? Actor { get; set; }
     public string? Director { get; set; }
+    public string? ProductionCompany { get; set; }
     public List<string>? Keywords { get; set; } = new List<string>();
     public int? Year { get; set; }
     public float? MinRating { get; set; }

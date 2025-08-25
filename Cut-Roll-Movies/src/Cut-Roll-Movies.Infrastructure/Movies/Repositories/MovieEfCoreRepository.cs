@@ -19,18 +19,7 @@ public class MovieEfCoreRepository : IMovieRepository
 
     public async Task<PagedResult<MovieSimplifiedDto>> SearchAsync(MovieSearchRequest request)
     {
-        var query = _context.Movies.AsQueryable();
-
-        query = ApplyFilters(query, request);
-
-        var totalCount = await query.CountAsync();
-
-        query = ApplySorting(query, request);
-
-        var movies = query
-            .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .Include(m => m.MovieGenres)
+        var query = _context.Movies.Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.Genre)
             .Include(m => m.Cast)
                 .ThenInclude(c => c.Person)
@@ -40,9 +29,22 @@ public class MovieEfCoreRepository : IMovieRepository
                 .ThenInclude(k => k.Keyword)
             .Include(m => m.ProductionCountries)
                 .ThenInclude(pc => pc.Country)
+            .Include(m => m.ProductionCompanies)
+                .ThenInclude(p => p.Company)
             .Include(m => m.SpokenLanguages)
                 .ThenInclude(sl => sl.Language)
             .Include(m => m.Images).AsSplitQuery();
+
+        query = ApplyFilters(query, request);
+
+        var totalCount = await query.CountAsync();
+
+        query = ApplySorting(query, request);
+
+        var movies = query
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize);
+            
 
 
         return new PagedResult<MovieSimplifiedDto>()
@@ -113,8 +115,14 @@ public class MovieEfCoreRepository : IMovieRepository
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(request.ProductionCompany))
+        {
+            var company = $"%{request.ProductionCompany.Trim()}%";
+            query = query.Where(m => m.ProductionCompanies.Any(pc => EF.Functions.ILike(pc.Company.Name, company)));
+        }
+
         if (request.Year.HasValue)
-            query = query.Where(m => m.ReleaseDate.HasValue && m.ReleaseDate.Value.Year == request.Year.Value);
+                query = query.Where(m => m.ReleaseDate.HasValue && m.ReleaseDate.Value.Year == request.Year.Value);
 
         if (request.MinRating.HasValue)
             query = query.Where(m => m.VoteAverage >= request.MinRating.Value);
